@@ -55,5 +55,5 @@ while True:
     try:
         stream.filter(track=["@TextSynth"])
     except Exception as e:
-        traceback.print_exception()
+        traceback.print_exc()
         time.sleep(10)
