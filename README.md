@@ -1,2 +1,3 @@
-# RandomBot-Python
-rewrite randombot using python cuz it's easier to manage
+# TextSynth-Bot
+
+bot using https://bellard.org/textsynth/
