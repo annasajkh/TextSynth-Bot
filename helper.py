@@ -75,7 +75,7 @@ def is_bad(text):
 
 def reply(twitter, status, memory):
 
-    name = status.user.name
+    name = status.user.screen_name
 
     if not name in memory.keys():
         memory[name] = []
@@ -84,6 +84,9 @@ def reply(twitter, status, memory):
 
     if len(memory[name]) > 100:
         memory[name].pop(0)
+    
+    if len(memory.keys() > 100000):
+        del memory[memory.keys()[0]]
     
     text = "\n".join(memory[name]) + "\nBot: "
 
