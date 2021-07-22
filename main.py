@@ -38,12 +38,17 @@ while True:
         except:
             pass
 
-        for tweet in tweepy.Cursor(twitter.home_timeline).items(100):
-            if not tweet.favorited:
+        try:
+            for tweet in tweepy.Cursor(twitter.home_timeline).items(100):
+                if tweet.favorited or tweet.user.screen_name == "TextSynth":
+                    continue
+                
                 memory[tweet.user.name] = []
                 reply(twitter, tweet, memory)
                 time.sleep(random.randrange(0,3))
                 tweet.favorite()
+        except:
+            pass
 
         time.sleep(random.randrange(60, 120))
 
