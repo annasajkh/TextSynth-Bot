@@ -15,7 +15,11 @@ class Listener(tweepy.StreamListener):
         if status.user.screen_name == "TextSynth":
             return
         
+        if status.favorited:
+            return
+        
         reply(twitter, status, memory)
+        status.favorite()
 
     def on_error(self, status_code):
         if status_code == 420:
@@ -30,7 +34,7 @@ stream = tweepy.Stream(auth, Listener())
 
 while True:
     try:
-        stream.filter(track=["@TextSynth", "artificial intelligence", "chatbot"], languages=["en"])
+        stream.filter(track=["@TextSynth", "chatbot"], languages=["en"])
     except Exception as e:
         traceback.print_exc()
         time.sleep(10)
