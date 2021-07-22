@@ -31,10 +31,16 @@ class Listener(tweepy.StreamListener):
 
         print("-" * 30)
 
-        result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
-
-        while is_bad(result):
+        try:
             result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
+        except:
+            result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
+        
+        while is_bad(result):
+            try:
+                result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
+            except:
+                result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
 
         memory[name].append(f"Bot: {result}")
         
