@@ -2,7 +2,8 @@ from pyppeteer import launch
 
 import re
 import asyncio
-import tweepy
+import random
+
 
 from profanity_check import predict
 from better_profanity import profanity
@@ -38,7 +39,7 @@ async def get_GPTJ(text):
 
     gtext = await page.querySelector("#gtext")
 
-    await asyncio.sleep(3)
+    await asyncio.sleep(random.randrange(3, 5))
     
     result = await page.evaluate("(element) => element.innerText",gtext)
     result = result.replace(text, "").strip().split("Bot:")[0].strip().split("\n")[0][0:280]
@@ -72,6 +73,7 @@ def is_bad(text):
         return False
     
     return False
+
 
 def reply(twitter, status, memory):
 
