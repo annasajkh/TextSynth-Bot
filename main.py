@@ -7,6 +7,8 @@ import traceback
 from twitter_api import *
 from helper import *
 
+import random
+
 memory = {}
 
 
@@ -14,38 +16,8 @@ class Listener(tweepy.StreamListener):
     def on_status(self, status):
         if status.user.screen_name == "TextSynth":
             return
-
-        name = status.user.screen_name
-
-        if not name in memory.keys():
-            memory[name] = []
-
-        memory[name].append(build_text(status))
-
-        if len(memory[name]) > 100:
-            memory[name].pop(0)
         
-        text = "\n".join(memory[name]) + "\nBot: "
-        
-        print(text)
-
-        print("-" * 30)
-
-        try:
-            result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
-        except:
-            result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
-        
-        while is_bad(result):
-            try:
-                result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
-            except:
-                result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
-
-        memory[name].append(f"Bot: {result}")
-        
-        print(text + result)
-        twitter.update_status(result, in_reply_to_status_id=status.id, auto_populate_reply_metadata=True)
+        reply(twitter, status, memory)
 
     def on_error(self, status_code):
         if status_code == 420:
@@ -54,12 +26,22 @@ class Listener(tweepy.StreamListener):
         
         print(status_code)
 
+
 stream = tweepy.Stream(auth, Listener())
+
 
 
 while True:
     try:
-        stream.filter(track=["@TextSynth"])
+        stream.filter(track=["@TextSynth"], is_async=True)
+
+        for tweet in tweepy.Cursor(twitter.home_timeline).items(100):
+            memory[tweet.user.name] = []
+            reply(twitter, tweet, memory)
+            time.sleep(random.randrange(0,3))
+
+        time.sleep(random.randrange(60, 120))
+
     except Exception as e:
         traceback.print_exc()
         time.sleep(10)
