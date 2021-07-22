@@ -78,24 +78,7 @@ stream = tweepy.Stream(auth, Listener())
 
 while True:
     try:
-        try:
-            stream.filter(track=["@TextSynth"], is_async=True)
-        except:
-            pass
-
-        try:
-            result = asyncio.get_event_loop().run_until_complete(get_gpt("".join(data)))
-
-            while is_bad(result):
-                try:
-                    result = asyncio.get_event_loop().run_until_complete(get_gpt("".join(data)))
-                except:
-                    result = asyncio.get_event_loop().run_until_complete(get_gpt("".join(data)))
-            print(result)
-            twitter.update_status(result.split("User:")[0].strip())
-        except Exception as e:
-            print(e)
-        time.sleep(60 * 60)
+        stream.filter(track=["@TextSynth"])
     except Exception as e:
         traceback.print_exc()
         time.sleep(10)
