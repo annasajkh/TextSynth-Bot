@@ -85,7 +85,7 @@ def reply(twitter, status, memory):
     if len(memory[name]) > 100:
         memory[name].pop(0)
     
-    if len(memory.keys() > 100000):
+    if len(memory.keys()) > 100000:
         del memory[memory.keys()[0]]
     
     text = "\n".join(memory[name]) + "\nBot: "

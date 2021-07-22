@@ -42,8 +42,8 @@ while True:
             for tweet in tweepy.Cursor(twitter.home_timeline).items(100):
                 if tweet.favorited or tweet.user.screen_name == "TextSynth":
                     continue
-                
-                memory[tweet.user.name] = []
+
+                memory[tweet.user.screen_name] = []
                 reply(twitter, tweet, memory)
                 time.sleep(random.randrange(0,3))
                 tweet.favorite()
