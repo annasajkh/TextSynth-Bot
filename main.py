@@ -19,7 +19,7 @@ class Listener(tweepy.StreamListener):
             return
         
         reply(twitter, status, memory)
-        status.favorite()
+        twitter.create_favorite(status.id)
 
     def on_error(self, status_code):
         if status_code == 420:
