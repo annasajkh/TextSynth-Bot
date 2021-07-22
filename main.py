@@ -28,7 +28,6 @@ class Listener(tweepy.StreamListener):
 stream = tweepy.Stream(auth, Listener())
 
 
-
 while True:
     try:
         stream.filter(track=["@TextSynth", "ai", "chatbot"])
