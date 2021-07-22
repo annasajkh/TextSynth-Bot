@@ -35,19 +35,27 @@ class Listener(tweepy.StreamListener):
         
         text = "\n".join(memory[name]) + "\nBot: "
 
+
+        
         try:
             result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
         except:
             result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
         
-        while result in memory[name]:
+        while result in "\n".join(memory[name]):
             result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
 
         while is_bad(result):
             try:
                 result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
+
+                while result in "\n".join(memory[name]):
+                    result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
             except:
                 result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
+
+                while result in "\n".join(memory[name]):
+                    result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
 
         memory[name].append(f"Bot: {result}")
         
