@@ -31,7 +31,7 @@ async def get_elemets(page):
 
 	return input_text, submit_button
 
-async def get_GPTJ(text):
+async def get_gpt(text):
     browser, page, input_text, submit_button = await setup_browser()
 
     await input_text.type(text)
@@ -42,10 +42,15 @@ async def get_GPTJ(text):
     await asyncio.sleep(random.randrange(3, 5))
     
     result = await page.evaluate("(element) => element.innerText",gtext)
-    result = result.replace(text, "").strip().split("Bot:")[0].strip().split("\n")[0][0:280]
 
     await browser.close()
 
+    return result.replace(text, "").strip()
+
+
+async def get_response(text):
+    result = get_gpt(text)
+    result = result.split("Bot:")[0].strip().split(".")[0].split("\n")[0][0:280]
     return result
 
 

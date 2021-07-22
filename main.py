@@ -9,6 +9,9 @@ from helper import *
 
 memory = {}
 
+f = open("data.txt", "r")
+data = f.readlines()
+f.close()
 
 class Listener(tweepy.StreamListener):
     def on_status(self, status):
@@ -35,24 +38,24 @@ class Listener(tweepy.StreamListener):
 
         
         try:
-            result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
+            result = asyncio.get_event_loop().run_until_complete(get_response(text))
         except:
-            result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
+            result = asyncio.get_event_loop().run_until_complete(get_response(text))
         
         while result in "\n".join(memory[name]):
-            result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
+            result = asyncio.get_event_loop().run_until_complete(get_response(text))
 
         while is_bad(result):
             try:
-                result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
+                result = asyncio.get_event_loop().run_until_complete(get_response(text))
 
                 while result in "\n".join(memory[name]):
-                    result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
+                    result = asyncio.get_event_loop().run_until_complete(get_response(text))
             except:
-                result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
+                result = asyncio.get_event_loop().run_until_complete(get_response(text))
 
                 while result in "\n".join(memory[name]):
-                    result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
+                    result = asyncio.get_event_loop().run_until_complete(get_response(text))
 
         memory[name].append(f"Bot: {result}")
         
@@ -79,18 +82,19 @@ while True:
             stream.filter(track=["@TextSynth"], is_async=True)
         except:
             pass
+
         try:
-            result = asyncio.get_event_loop().run_until_complete(get_GPTJ(""))
+            result = asyncio.get_event_loop().run_until_complete(get_gpt("".join(data)))
 
             while is_bad(result):
                 try:
-                    result = asyncio.get_event_loop().run_until_complete(get_GPTJ(""))
+                    result = asyncio.get_event_loop().run_until_complete(get_gpt("".join(data)))
                 except:
-                    result = asyncio.get_event_loop().run_until_complete(get_GPTJ(""))
-                    
-            twitter.update_status(result)
-        except:
-            pass
+                    result = asyncio.get_event_loop().run_until_complete(get_gpt("".join(data)))
+            print(result)
+            twitter.update_status(result.split("User:")[0].strip())
+        except Exception as e:
+            print(e)
         time.sleep(60 * 60)
     except Exception as e:
         traceback.print_exc()
