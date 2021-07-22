@@ -45,7 +45,7 @@ while True:
 
                 memory[tweet.user.screen_name] = []
                 reply(twitter, tweet, memory)
-                time.sleep(random.randrange(0,60))
+                time.sleep(random.randrange(30,60))
                 tweet.favorite()
         except:
             pass
