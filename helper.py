@@ -49,8 +49,8 @@ async def get_gpt(text):
 
 
 async def get_response(text):
-    result = get_gpt(text)
-    result = result.split("Bot:")[0].strip().split(".")[0].split("\n")[0][0:280]
+    result = await get_gpt(text)
+    result = result.split("Bot:")[0].strip().split("\n")[0][0:280]
     return result
 
 
