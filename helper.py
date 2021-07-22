@@ -108,4 +108,4 @@ def reply(twitter, status, memory):
     memory[name].append(f"Bot: {result}")
     
     print(text + result)
-    twitter.update_status(result, in_reply_to_status_id=status.id, auto_populate_reply_metadata=True)
+    twitter.update_status(f"@{name} {result}", in_reply_to_status_id=status.id)
