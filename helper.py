@@ -39,7 +39,7 @@ async def get_GPTJ(text):
 
     gtext = await page.querySelector("#gtext")
 
-    await asyncio.sleep(random.randrange(3, 5))
+    await asyncio.sleep(random.randrange(5, 10))
     
     result = await page.evaluate("(element) => element.innerText",gtext)
     result = result.replace(text, "").strip().split("Bot:")[0].strip().split("\n")[0][0:280]
