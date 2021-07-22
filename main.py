@@ -9,10 +9,6 @@ from helper import *
 
 memory = {}
 
-f = open("data.txt", "r")
-data = f.readlines()
-f.close()
-
 class Listener(tweepy.StreamListener):
     def on_status(self, status):
         if status.user.screen_name == "TextSynth":
