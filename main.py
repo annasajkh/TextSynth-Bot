@@ -33,7 +33,10 @@ stream = tweepy.Stream(auth, Listener())
 
 while True:
     try:
-        stream.filter(track=["@TextSynth"], is_async=True)
+        try:
+            stream.filter(track=["@TextSynth"], is_async=True)
+        except:
+            pass
 
         for tweet in tweepy.Cursor(twitter.home_timeline).items(100):
             if not tweet.favorited:
