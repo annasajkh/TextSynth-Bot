@@ -39,6 +39,9 @@ class Listener(tweepy.StreamListener):
             result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
         except:
             result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
+        
+        while result in memory[name]:
+            result = asyncio.get_event_loop().run_until_complete(get_GPTJ(text))
 
         while is_bad(result):
             try:
