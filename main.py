@@ -36,9 +36,11 @@ while True:
         stream.filter(track=["@TextSynth"], is_async=True)
 
         for tweet in tweepy.Cursor(twitter.home_timeline).items(100):
-            memory[tweet.user.name] = []
-            reply(twitter, tweet, memory)
-            time.sleep(random.randrange(0,3))
+            if not tweet.favorited:
+                memory[tweet.user.name] = []
+                reply(twitter, tweet, memory)
+                time.sleep(random.randrange(0,3))
+                tweet.favorite()
 
         time.sleep(random.randrange(60, 120))
 
