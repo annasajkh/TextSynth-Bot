@@ -34,7 +34,7 @@ stream = tweepy.Stream(auth, Listener())
 
 while True:
     try:
-        stream.filter(track=["@TextSynth", "chatbot"], languages=["en"])
+        stream.filter(track=["@TextSynth", "ai self aware"], languages=["en"])
     except Exception as e:
         traceback.print_exc()
         time.sleep(10)
