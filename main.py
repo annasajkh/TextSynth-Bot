@@ -50,7 +50,7 @@ while True:
         except:
             pass
 
-        time.sleep(random.randrange(60 * 30))
+        time.sleep(random.randrange(60 * 20, 60 * 30))
 
     except Exception as e:
         traceback.print_exc()
