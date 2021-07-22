@@ -39,7 +39,7 @@ async def get_GPTJ(text):
 
     gtext = await page.querySelector("#gtext")
 
-    await asyncio.sleep(random.randrange(5, 10))
+    await asyncio.sleep(random.randrange(3, 5))
     
     result = await page.evaluate("(element) => element.innerText",gtext)
     result = result.replace(text, "").strip().split("Bot:")[0].strip().split("\n")[0][0:280]
@@ -110,4 +110,5 @@ def reply(twitter, status, memory):
     memory[name].append(f"Bot: {result}")
     
     print(text + result)
-    twitter.update_status(f"@{name} {result}", in_reply_to_status_id=status.id)
+    
+    twitter.update_status(result, in_reply_to_status_id=status.id, auto_populate_reply_metadata=True)
