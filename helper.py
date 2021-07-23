@@ -51,7 +51,7 @@ async def get_gpt(text):
     try:
         text = "".join([json.dumps(chunk)["text"] for chunk in text]).strip()
     except:
-        text = ["hi", "hello", "how are you?", "anyways", "well...", "..."][random.randrange(0,6)]
+        text = ["hm?", "huh","what","hi", "hello", "how are you?", "anyways", "well...", "...", "lol"][random.randrange(0,10)]
 
     return text
 
@@ -112,4 +112,4 @@ def reply(twitter, status):
     try:
         twitter.update_status(result, in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
     except Exception:
-        twitter.update_status(["hi", "hello", "how are you?", "anyways", "well...", "..."][random.randrange(0,6)], in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
+        twitter.update_status(["hm?", "huh","what","hi", "hello", "how are you?", "anyways", "well...", "...", "lol"][random.randrange(0,10)], in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
