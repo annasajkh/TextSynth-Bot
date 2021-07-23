@@ -1,20 +1,20 @@
-from pyppeteer import launch
-
 import re
 import asyncio
-import random
-
+import aiohttp
 
 from profanity_check import predict
 from better_profanity import profanity
 import paralleldots
 import os
+import json
 import re
 
 import time
 
 paralleldots.set_api_key(os.environ["PARALLELDOTS_KEY"])
 
+
+url = "https://bellard.org/textsynth/api/v1/engines/gptj_6B/completions"
 
 def build_text(status):
     text = get_text(status)
@@ -30,47 +30,28 @@ def get_text(status):
     except:
         return status.text
 
-async def get_elemets(page):
-	await page.waitForSelector("#input_text")
-
-	input_text = await page.querySelector("#input_text")
-
-	submit_button = await page.querySelector("#submit_button")
-
-	return input_text, submit_button
-
 async def get_gpt(text):
-    browser, page, input_text, submit_button = await setup_browser()
 
-    await input_text.type(text)
-    await submit_button.click()
-
-    gtext = await page.querySelector("#gtext")
-
-    await asyncio.sleep(random.randrange(3, 5))
+    payload = {
+        "prompt": text,
+        "temperature": 1,
+        "top_k": 40, 
+        "top_p": 0.9, 
+        "seed": 0
+    }
     
-    result = await page.evaluate("(element) => element.innerText",gtext)
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url,data=json.dumps(payload)) as response:
+            text = await response.text()
+            text = filter(lambda x: x != "", [chunk for chunk in text.split("\n")])
 
-    await browser.close()
-
-    return result.replace(text, "").strip()
+    return "".join([json.loads(chunk)["text"] for chunk in text]).strip()
 
 
 async def get_response(text):
     result = await get_gpt(text)
-    result = re.split(".*?:",result)[0].strip()
+    result = re.split(".*?:",result)[0].strip()[:280]
     return result
-
-
-async def setup_browser():
-    browser = await launch({"args":["--no-sandbox","--disable-setuid-sandbox"]})
-    page = await browser.newPage()
-
-    await page.goto("https://bellard.org/textsynth/")
-
-    input_text, submit_button = await get_elemets(page)
-
-    return browser, page, input_text, submit_button
 
 
 def is_bad(text):
@@ -114,24 +95,22 @@ def reply(twitter, status):
     
     memory.reverse()
     
-
     text = "\n".join(memory) + "\nTextSynth: "
 
-    
-    result = asyncio.get_event_loop().run_until_complete(get_response(text))
+    result = asyncio.run(get_response(text))
     
     while result in "\n".join(memory):
-        result = asyncio.get_event_loop().run_until_complete(get_response(text))
+        result = asyncio.run(get_response(text))
 
 
     while is_bad(result):
         try:
-            result = asyncio.get_event_loop().run_until_complete(get_response(text))
+            result = asyncio.run(get_response(text))
 
             while result in "\n".join(memory):
-                result = asyncio.get_event_loop().run_until_complete(get_response(text))
+                result = asyncio.run(get_response(text))
         except:
-            result = asyncio.get_event_loop().run_until_complete(get_response(text))
+            result = asyncio.run(get_response(text))
 
             while result in "\n".join(memory):
                 result = asyncio.get_event_loop().run_until_complete(get_response(text))
