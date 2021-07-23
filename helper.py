@@ -45,10 +45,12 @@ async def get_gpt(text):
             text = await response.text()
             text = filter(lambda x: x != "", [chunk for chunk in text.split("\n")])
             print(text)
+
+
     try:
         text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
     except Exception as e:
-        returnstr(e)
+        return str(e)[:280]
 
     return text
 
