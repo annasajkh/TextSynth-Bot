@@ -121,10 +121,6 @@ def reply(twitter, status):
         result = asyncio.get_event_loop().run_until_complete(get_response(text))
     except:
         result = asyncio.get_event_loop().run_until_complete(get_response(text))
-    
-    while result in "\n".join(memory):
-        result = asyncio.get_event_loop().run_until_complete(get_response(text))
-
 
     while is_bad(result):
         try:
@@ -142,4 +138,4 @@ def reply(twitter, status):
     print(text + result)
     print("-" * 30)
     
-    twitter.update_status(result, in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
+    twitter.update_status(f"@{status.user.screen_name} {result}", in_reply_to_status_id=reply_status.id)
