@@ -17,8 +17,13 @@ class Listener(tweepy.StreamListener):
 
         contain_trigger = False
 
+        try:
+            text = status.extended_tweet["full_text"]
+        except:
+            text = status.text
+
         for i in triggers:
-            if i in status.extended_tweet["full_text"].lower():
+            if i in status.text.lower():
                 contain_trigger = True
 
         if status.in_reply_to_status_id != None and contain_trigger:
@@ -33,11 +38,11 @@ class Listener(tweepy.StreamListener):
 
         index = 0
 
-        memory.append(build_text(status))
+        memory.append(build_text(status.user.screen_name, text))
 
         while status.in_reply_to_status_id != None:
             status = twitter.get_status(status.in_reply_to_status_id)
-            memory.append(build_text(status))
+            memory.append(build_text(status.user.screen_name, text))
 
             time.sleep(1)
             
