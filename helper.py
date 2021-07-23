@@ -44,9 +44,8 @@ async def get_gpt(text):
         async with session.post(url,data=json.dumps(payload)) as response:
             text = await response.text()
 
-    
+
     text = filter(lambda x: x != "", [chunk for chunk in text.split("\n")])
-    print(text)
 
 
     try:
