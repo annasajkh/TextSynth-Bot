@@ -11,11 +11,13 @@ import paralleldots
 import os
 import re
 
+import tweepy
+
 paralleldots.set_api_key(os.environ["PARALLELDOTS_KEY"])
 
 
-def build_text(status):
-    text = re.sub("@[^\s]+", "", status.text)
+def build_text(status : tweepy.Status):
+    text = re.sub("@[^\s]+", "", status.extended_tweet["full_text"])
     text = re.sub("https://[^\s]+", "", text).strip()
     text = re.sub("\n", " ", text)
 
