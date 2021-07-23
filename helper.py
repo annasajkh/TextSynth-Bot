@@ -70,10 +70,10 @@ def is_bad(text):
 
 
 def reply(twitter, status):
-    if status.favorited:
+    try:
+        twitter.create_favorite(status.id)
+    except:
         return
-    
-    twitter.create_favorite(status.id)
 
     memory = []
 
