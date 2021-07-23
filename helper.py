@@ -16,12 +16,18 @@ import tweepy
 paralleldots.set_api_key(os.environ["PARALLELDOTS_KEY"])
 
 
-def build_text(name, text):
+def build_text(status):
+    text = get_text(status)
     text = re.sub("https://[^\s]+", "", text).strip()
     text = re.sub("\n", " ", text)
 
-    return f"{name}: {text}"
+    return f"{status.user.screen_name}: {text}"
 
+def get_text(status):
+    try:
+        return status.extended_tweet["full_text"]
+    except:
+        return status.text
 
 async def get_elemets(page):
 	await page.waitForSelector("#input_text")

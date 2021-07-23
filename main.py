@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+from six import text_type
 load_dotenv()
 
 import time
@@ -17,10 +18,7 @@ class Listener(tweepy.StreamListener):
 
         contain_trigger = False
 
-        try:
-            text = status.extended_tweet["full_text"]
-        except:
-            text = status.text
+        text = get_text(status)
 
         for i in triggers:
             if i in status.text.lower():
@@ -38,11 +36,11 @@ class Listener(tweepy.StreamListener):
 
         index = 0
 
-        memory.append(build_text(status.user.screen_name, text))
+        memory.append(build_text(status))
 
         while status.in_reply_to_status_id != None:
             status = twitter.get_status(status.in_reply_to_status_id)
-            memory.append(build_text(status.user.screen_name, text))
+            memory.append(build_text(status))
 
             time.sleep(1)
             
