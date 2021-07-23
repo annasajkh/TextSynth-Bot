@@ -27,9 +27,9 @@ class Listener(tweepy.StreamListener):
             status = twitter.get_status(status.in_reply_to_status_id)
             memory.append(build_text(status))
 
-            time.sleep(2)
+            time.sleep(1)
             
-            index+=1
+            index += 1
             if index > 10:
                 break
         
