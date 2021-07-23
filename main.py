@@ -24,7 +24,7 @@ class Listener(tweepy.StreamListener):
         memory.append(build_text(status))
 
         while status.in_reply_to_status_id != None:
-            status = twitter.get_status(status.id)
+            status = twitter.get_status(status.in_reply_to_status_id)
             memory.append(build_text(status))
 
             time.sleep(2)
