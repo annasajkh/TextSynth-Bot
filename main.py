@@ -7,7 +7,6 @@ import traceback
 from twitter_api import *
 from helper import *
 
-memory = {}
 
 class Listener(tweepy.StreamListener):
     def on_status(self, status):
@@ -18,19 +17,27 @@ class Listener(tweepy.StreamListener):
 
         name = status.user.screen_name
 
-        if not name in memory.keys():
-            memory[name] = []
+        memory = []
+
+        reply_status = status
+
+        index = 0
 
         memory[name].append(build_text(status))
 
-        if len(memory[name]) > 100:
-            memory[name].pop(0)
-        
-        if len(memory.keys()) > 100000:
-            del memory[memory.keys()[0]]
-        
-        text = "\n".join(memory[name]) + "\nBot: "
+        while status.in_reply_to_status_id != None:
+            status = twitter.get_status(status.id)
+            memory[name].append(build_text(status))
 
+            time.sleep(2)
+            index+=1
+            if index > 10:
+                break
+        
+        memory.reverse()
+        
+
+        text = "\n".join(memory[name]) + "\nBot: "
 
         
         try:
@@ -40,6 +47,7 @@ class Listener(tweepy.StreamListener):
         
         while result in "\n".join(memory[name]):
             result = asyncio.get_event_loop().run_until_complete(get_response(text))
+
 
         while is_bad(result):
             try:
@@ -52,14 +60,12 @@ class Listener(tweepy.StreamListener):
 
                 while result in "\n".join(memory[name]):
                     result = asyncio.get_event_loop().run_until_complete(get_response(text))
-
-        memory[name].append(f"Bot: {result}")
         
         print("-" * 30)
         print(text + result)
         print("-" * 30)
         
-        twitter.update_status(result, in_reply_to_status_id=status.id, auto_populate_reply_metadata=True)
+        twitter.update_status(result, in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
 
     def on_error(self, status_code):
         if status_code == 420:
