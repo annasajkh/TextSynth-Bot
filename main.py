@@ -10,10 +10,13 @@ from helper import *
     
 class Listener(tweepy.StreamListener):
     def on_status(self, status):
-        if status.user.screen_name == "TextSynth":
-            return
-            
-        reply(twitter, status)
+        try:
+            if status.user.screen_name == "TextSynth":
+                return
+                
+            reply(twitter, status)
+        except:
+            pass
 
 
     def on_error(self, status_code):
