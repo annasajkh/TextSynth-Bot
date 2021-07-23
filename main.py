@@ -8,8 +8,6 @@ import traceback
 from twitter_api import *
 from helper import *
 
-import random
-
     
 class Listener(tweepy.StreamListener):
     def on_status(self, status):
