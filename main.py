@@ -8,10 +8,22 @@ from twitter_api import *
 from helper import *
 
 
+triggers =  ["meme", "game"]
+
 class Listener(tweepy.StreamListener):
     def on_status(self, status):
         if status.user.screen_name == "TextSynth":
             return
+
+        contain_trigger = False
+
+        for i in triggers:
+            if i in status.extended_tweet["full_text"].lower():
+                contain_trigger = True
+
+        if status.in_reply_to_status_id != None and contain_trigger:
+            return
+
 
         twitter.create_favorite(status.id)
 
@@ -79,7 +91,7 @@ stream = tweepy.Stream(auth, Listener())
 
 while True:
     try:
-        stream.filter(track=["@TextSynth", "talk with ai", "self aware", ""])
+        stream.filter(track=["@TextSynth"] + triggers)
     except Exception as e:
         traceback.print_exc()
         time.sleep(10)
