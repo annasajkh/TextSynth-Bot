@@ -1,5 +1,4 @@
 from dotenv import load_dotenv
-import _thread
 load_dotenv()
 
 import time
