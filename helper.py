@@ -9,7 +9,7 @@ from profanity_check import predict
 from better_profanity import profanity
 import paralleldots
 import os
-
+import re
 
 paralleldots.set_api_key(os.environ["PARALLELDOTS_KEY"])
 
@@ -50,7 +50,7 @@ async def get_gpt(text):
 
 async def get_response(text):
     result = await get_gpt(text)
-    result = result.split("Bot:")[0].strip().split("\n")[0][0:280]
+    result = re.split(".*?:",result)[0].strip()
     return result
 
 
