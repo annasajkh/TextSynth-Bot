@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from six import text_type
+import _thread
 load_dotenv()
 
 import time
@@ -9,77 +9,14 @@ from twitter_api import *
 from helper import *
 
 
-triggers =  ["meme", "game"]
-
+    
 class Listener(tweepy.StreamListener):
     def on_status(self, status):
         if status.user.screen_name == "TextSynth":
             return
 
-        contain_trigger = False
 
-        text = get_text(status)
-
-        for i in triggers:
-            if i in status.text.lower():
-                contain_trigger = True
-
-        if status.in_reply_to_status_id != None and contain_trigger:
-            return
-
-
-        twitter.create_favorite(status.id)
-
-        memory = []
-
-        reply_status = status
-
-        index = 0
-
-        memory.append(build_text(status))
-
-        while status.in_reply_to_status_id != None:
-            status = twitter.get_status(status.in_reply_to_status_id)
-            memory.append(build_text(status))
-
-            time.sleep(1)
-            
-            index += 1
-            if index > 10:
-                break
-        
-        memory.reverse()
-        
-
-        text = "\n".join(memory) + "\nTextSynth: "
-
-        
-        try:
-            result = asyncio.get_event_loop().run_until_complete(get_response(text))
-        except:
-            result = asyncio.get_event_loop().run_until_complete(get_response(text))
-        
-        while result in "\n".join(memory):
-            result = asyncio.get_event_loop().run_until_complete(get_response(text))
-
-
-        while is_bad(result):
-            try:
-                result = asyncio.get_event_loop().run_until_complete(get_response(text))
-
-                while result in "\n".join(memory):
-                    result = asyncio.get_event_loop().run_until_complete(get_response(text))
-            except:
-                result = asyncio.get_event_loop().run_until_complete(get_response(text))
-
-                while result in "\n".join(memory):
-                    result = asyncio.get_event_loop().run_until_complete(get_response(text))
-        
-        print("-" * 30)
-        print(text + result)
-        print("-" * 30)
-        
-        twitter.update_status(result, in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
+        reply(twitter, status)
 
     def on_error(self, status_code):
         if status_code == 420:
@@ -88,13 +25,24 @@ class Listener(tweepy.StreamListener):
         
         print(status_code)
 
-
 stream = tweepy.Stream(auth, Listener())
 
 
 while True:
     try:
-        stream.filter(track=["@TextSynth"] + triggers)
+        try:
+            stream.filter(track=["@TextSynth"], is_async=True)
+        except:
+            pass
+        
+        try:
+            for status in tweepy.Cursor(twitter.home_timeline).items(20):
+                reply(twitter, status)
+        except Exception as e:
+            time.sleep(1)
+            continue
+        
+        time.sleep(random.randrange(60, 120) * 60)
     except Exception as e:
         traceback.print_exc()
         time.sleep(10)
