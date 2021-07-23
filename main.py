@@ -33,23 +33,7 @@ stream = tweepy.Stream(auth, Listener())
 while True:
     try:
         print("bot starting...")
-        try:
-            stream.filter(track=["@TextSynth"], is_async=True)
-        except:
-            pass
-
-        print("bot ready")
-
-        try:
-            for status in tweepy.Cursor(twitter.home_timeline).items(20):
-                reply(twitter, status)
-        except:
-            traceback.print_exc()
-            time.sleep(10)
-            continue
-
-        time.sleep(random.randrange(60, 120) * 60)
-
+        stream.filter(track=["@TextSynth"])
     except Exception as e:
         traceback.print_exc()
         time.sleep(10)
