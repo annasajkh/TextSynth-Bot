@@ -118,10 +118,7 @@ def reply(twitter, status):
     text = "\n".join(memory) + "\nTextSynth: "
 
     
-    try:
-        result = asyncio.get_event_loop().run_until_complete(get_response(text))
-    except:
-        result = asyncio.get_event_loop().run_until_complete(get_response(text))
+    result = asyncio.get_event_loop().run_until_complete(get_response(text))
     
     while result in "\n".join(memory):
         result = asyncio.get_event_loop().run_until_complete(get_response(text))
