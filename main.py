@@ -15,21 +15,20 @@ class Listener(tweepy.StreamListener):
 
         twitter.create_favorite(status.id)
 
-        name = status.user.screen_name
-
         memory = []
 
         reply_status = status
 
         index = 0
 
-        memory[name].append(build_text(status))
+        memory.append(build_text(status))
 
         while status.in_reply_to_status_id != None:
             status = twitter.get_status(status.id)
-            memory[name].append(build_text(status))
+            memory.append(build_text(status))
 
             time.sleep(2)
+            
             index+=1
             if index > 10:
                 break
@@ -37,7 +36,7 @@ class Listener(tweepy.StreamListener):
         memory.reverse()
         
 
-        text = "\n".join(memory[name]) + "\nBot: "
+        text = "\n".join(memory) + "\nTextSynth: "
 
         
         try:
@@ -45,7 +44,7 @@ class Listener(tweepy.StreamListener):
         except:
             result = asyncio.get_event_loop().run_until_complete(get_response(text))
         
-        while result in "\n".join(memory[name]):
+        while result in "\n".join(memory):
             result = asyncio.get_event_loop().run_until_complete(get_response(text))
 
 
@@ -53,12 +52,12 @@ class Listener(tweepy.StreamListener):
             try:
                 result = asyncio.get_event_loop().run_until_complete(get_response(text))
 
-                while result in "\n".join(memory[name]):
+                while result in "\n".join(memory):
                     result = asyncio.get_event_loop().run_until_complete(get_response(text))
             except:
                 result = asyncio.get_event_loop().run_until_complete(get_response(text))
 
-                while result in "\n".join(memory[name]):
+                while result in "\n".join(memory):
                     result = asyncio.get_event_loop().run_until_complete(get_response(text))
         
         print("-" * 30)
