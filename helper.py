@@ -121,4 +121,7 @@ def reply(twitter, status):
     print(text + result)
     print("-" * 30)
     
-    twitter.update_status(result, in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
+    try:
+        twitter.update_status(result, in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
+    except:
+        pass
