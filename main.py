@@ -79,7 +79,7 @@ stream = tweepy.Stream(auth, Listener())
 
 while True:
     try:
-        stream.filter(track=["@TextSynth"])
+        stream.filter(track=["@TextSynth", "talk with ai", "self aware", ""])
     except Exception as e:
         traceback.print_exc()
         time.sleep(10)
