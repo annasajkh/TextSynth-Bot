@@ -18,8 +18,9 @@ paralleldots.set_api_key(os.environ["PARALLELDOTS_KEY"])
 
 def build_text(status):
     text = get_text(status)
-    text = re.sub("https://[^\s]+", "", text).strip()
-    text = re.sub("\n", " ", text)
+    text = re.sub("https://[^\s]+", "", text)
+    text = re.sub("@[^\s]+", "", text)
+    text = re.sub("\n", " ", text).strip()
 
     return f"{status.user.screen_name}: {text}"
 
@@ -121,6 +122,10 @@ def reply(twitter, status):
         result = asyncio.get_event_loop().run_until_complete(get_response(text))
     except:
         result = asyncio.get_event_loop().run_until_complete(get_response(text))
+    
+    while result in "\n".join(memory):
+        result = asyncio.get_event_loop().run_until_complete(get_response(text))
+
 
     while is_bad(result):
         try:

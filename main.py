@@ -12,8 +12,7 @@ class Listener(tweepy.StreamListener):
     def on_status(self, status):
         if status.user.screen_name == "TextSynth":
             return
-
-
+            
         reply(twitter, status)
 
 
