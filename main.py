@@ -10,11 +10,13 @@ from helper import *
     
 class Listener(tweepy.StreamListener):
     def on_status(self, status):
+        time.sleep(random.uniform(0,2))
+        
         try:
             twitter.create_favorite(status.id)
         except:
             return
-        
+
         if status.user.screen_name == "TextSynth":
             return
             
