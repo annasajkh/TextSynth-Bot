@@ -10,6 +10,7 @@ import json
 import re
 
 import time
+import random
 
 paralleldots.set_api_key(os.environ["PARALLELDOTS_KEY"])
 
@@ -47,7 +48,12 @@ async def get_gpt(text):
 
     text = filter(lambda x: x != "", [chunk for chunk in text.split("\n")])
 
-    return "".join([chunk.replace("{\"text\":\"","").replace("\",\"reached_end\":false}", "") for chunk in text]).strip()
+    try:
+        text = "".join([json.dumps(chunk)["text"] for chunk in text]).strip()
+    except:
+        text = ["hi", "hello", "how are you?", "anyways", "well...", "..."][random.randrange(0,6)]
+
+    return text
 
 async def get_response(text):
     result = await get_gpt(text)
@@ -97,10 +103,7 @@ def reply(twitter, status):
     result = asyncio.get_event_loop().run_until_complete(get_response(text))
 
     while is_bad(result):
-        try:
-            result = asyncio.get_event_loop().run_until_complete(get_response(text))
-        except:
-            result = asyncio.get_event_loop().run_until_complete(get_response(text))
+        result = asyncio.get_event_loop().run_until_complete(get_response(text))
     
     print("-" * 30)
     print(text + result)
@@ -108,5 +111,5 @@ def reply(twitter, status):
     
     try:
         twitter.update_status(result, in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
-    except:
-        pass
+    except Exception:
+        twitter.update_status(["hi", "hello", "how are you?", "anyways", "well...", "..."][random.randrange(0,6)], in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
