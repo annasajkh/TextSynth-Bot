@@ -44,8 +44,13 @@ async def get_gpt(text):
         async with session.post(url,data=json.dumps(payload)) as response:
             text = await response.text()
             text = filter(lambda x: x != "", [chunk for chunk in text.split("\n")])
-    
-    return  "".join([chunk.replace("{\"text\":\"","").replace("\",\"reached_end\":false}", "") for chunk in text]).strip()
+            print(text)
+    try:
+        text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
+    except Exception as e:
+        returnstr(e)
+
+    return text
 
 async def get_response(text):
     result = await get_gpt(text)
