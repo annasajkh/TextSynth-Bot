@@ -3,6 +3,7 @@ load_dotenv()
 
 import time
 import traceback
+import random
 
 from twitter_api import *
 from helper import *
@@ -11,7 +12,7 @@ from helper import *
 class Listener(tweepy.StreamListener):
     def on_status(self, status):
         time.sleep(random.uniform(0,2))
-        
+
         try:
             twitter.create_favorite(status.id)
         except:
