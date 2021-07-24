@@ -24,12 +24,14 @@ class Listener(tweepy.StreamListener):
         
         async def container():
             attempt = 0
-            
+
             while True:
                 try:
+                    print("attempting to reply...")
                     await reply(twitter, status)
                     break
                 except:
+                    traceback.print_exc()
                     attempt += 1
 
                     if attempt > 10:
