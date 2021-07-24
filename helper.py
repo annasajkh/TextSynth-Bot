@@ -49,9 +49,7 @@ async def get_gpt(text):
 
 
     text = filter(lambda x: x != "", [chunk.strip() for chunk in text.split("\n")])
-    text = "".join([chunk.strip().replace('{"text":"',"").replace('","reached_end":false}',"") for chunk in text]).strip()
-
-    print(text)
+    text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
 
     return text
 
@@ -109,8 +107,4 @@ def reply(twitter, status):
     print(text + result)
     print("-" * 30)
     
-    try:
-        twitter.update_status(result, in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
-    except Exception:
-        traceback.print_exc()
-        twitter.update_status(["hm?", "huh","what","hi", "hello", "how are you?", "anyways", "well...", "...", "lol"][random.randrange(0,10)], in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
+    twitter.update_status(result, in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)

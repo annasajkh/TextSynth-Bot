@@ -20,8 +20,13 @@ class Listener(tweepy.StreamListener):
 
         if status.user.screen_name == "TextSynth":
             return
-            
-        reply(twitter, status)
+        
+        while True:
+            try:
+                reply(twitter, status)
+                break
+            except:
+                pass
 
 
 
