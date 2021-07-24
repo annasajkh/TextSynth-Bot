@@ -50,15 +50,27 @@ async def get_gpt(text):
     headers = {
         "Content-Type": "application/json"
     }
-    
+
     async with aiohttp.ClientSession() as session:
         async with session.post(url,data=json.dumps(payload, ensure_ascii=False), headers=headers) as response:
             text = await response.text()
+    
+    while True:
+        try:
+            text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
+            text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
 
-        text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
-        text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
+            if text.strip() == "":
+                raise Exception("please don't be empty")
+            
+            break
+        except:
+            async with aiohttp.ClientSession() as session:
+                async with session.post(url,data=json.dumps(payload, ensure_ascii=False), headers=headers) as response:
+                    text = await response.text()
 
-        return text
+
+    return text
 
 async def get_response(text):
     result = await get_gpt(text)
@@ -100,7 +112,7 @@ async def reply(twitter, status):
     while status.in_reply_to_status_id != None:
         status = twitter.get_status(status.in_reply_to_status_id)
         memory.append(build_text(status))
-        
+
         try:
             twitter.create_favorite(status.id)
         except:
@@ -126,19 +138,3 @@ async def reply(twitter, status):
     print("-" * 30)
     
     twitter.update_status(result, in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
-
-async def attempt_to_reply(twitter, status):
-    attempt = 0
-
-    while True:
-        try:
-            print("attempting to reply...")
-            await reply(twitter, status)
-            break
-        except:
-            traceback.print_exc()
-            attempt += 1
-
-            if attempt > 10:
-                print("error max attempt reached...")
-                break

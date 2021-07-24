@@ -15,7 +15,7 @@ class Listener(tweepy.StreamListener):
         if status.user.screen_name == "TextSynth":
             return
 
-        asyncio.get_event_loop().run_until_complete(attempt_to_reply(twitter, status))
+        asyncio.get_event_loop().run_until_complete(reply(twitter, status))
 
 
     def on_error(self, status_code):
