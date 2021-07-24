@@ -21,9 +21,10 @@ class Listener(tweepy.StreamListener):
         if status.user.screen_name == "TextSynth":
             return
 
-        attempt = 0
         
         async def container():
+            attempt = 0
+            
             while True:
                 try:
                     await reply(twitter, status)
