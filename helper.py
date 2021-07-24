@@ -64,8 +64,12 @@ async def get_gpt(text):
 
     text = filter(lambda x: x != "", [chunk.strip() for chunk in text.split("\n")])
 
+    for chunk in text:
+        print(chunk)
+
     try:
         text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
+
     except Exception as e:
         traceback.print_exc()
         text = ["hm?", "huh","what","hi", "hello", "how are you?", "anyways", "well...", "...", "lol"][random.randrange(0,10)]
