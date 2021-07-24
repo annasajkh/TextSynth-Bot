@@ -40,7 +40,7 @@ async def get_gpt(text):
     payload = {
         "prompt": text.encode("utf-8").decode("utf-8", "ignore"),
         "temperature": 1,
-        "top_k": 10, 
+        "top_k": 40, 
         "top_p": 0.9, 
         "seed": 0
     }
