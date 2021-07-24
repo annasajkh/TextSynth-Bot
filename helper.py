@@ -18,23 +18,6 @@ paralleldots.set_api_key(os.environ["PARALLELDOTS_KEY"])
 
 url = "https://bellard.org/textsynth/api/v1/engines/gptj_6B/completions"
 
-def html_escape(text):
-    r = "";
-
-    for c in text.split(""):
-        if c == "<":
-            r += "&lt;"
-        elif c == ">":
-            r += "&gt;"
-        elif c == "&":
-            r += "&amp;"
-        elif c == "\"":
-            r += "&quot;"
-        else:
-            r += c;
-        
-    return r;
-
 
 def build_text(status):
     text = get_text(status)
@@ -73,9 +56,10 @@ async def get_gpt(text):
 
     text = [chunk for chunk in text.split("\n\n")]
     print(list(text))
+    exit(0)
     text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
 
-    return html_escape(text)
+    return text
 
 async def get_response(text):
     result = await get_gpt(text)
