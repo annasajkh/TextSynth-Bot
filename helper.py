@@ -49,6 +49,7 @@ async def get_gpt(text):
 
 
     text = filter(lambda x: x != "", [chunk.strip() for chunk in text.split("\n")])
+    print(list(text))
     text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
     text = text.decode("utf8")
 
