@@ -11,8 +11,7 @@ from helper import *
     
 class Listener(tweepy.StreamListener):
     def on_status(self, status):
-
-
+        
         if status.user.screen_name == "TextSynth":
             return
 
@@ -33,10 +32,10 @@ class Listener(tweepy.StreamListener):
                         print("error max attempt reached...")
                         break
         
-        asyncio.get_event_loop().run_until_complete(container())
+        asyncio.get_event_loop().run_until_complete(container()))
 
         for status in tweepy.Cursor(twitter.home_timeline).items(20):
-            reply(twitter, status)
+            asyncio.get_event_loop().run_until_complete(reply(twitter, status))
             time.sleep(10)
 
 
