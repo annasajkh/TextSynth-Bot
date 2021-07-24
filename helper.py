@@ -52,22 +52,17 @@ async def get_gpt(text):
     }
 
     async with aiohttp.ClientSession() as session:
-        async with session.post(url,data=json.dumps(payload, ensure_ascii=False), headers=headers) as response:
-            text = await response.text()
-    
-    while True:
-        try:
-            text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
-            text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
+        while True:
+            async with session.post(url,data=json.dumps(payload, ensure_ascii=False), headers=headers) as response:
+                text = await response.text()
+                
+                text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
+                text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
 
-            if text.strip() == "":
-                raise Exception("please don't be empty")
-            
-            break
-        except:
-            async with aiohttp.ClientSession() as session:
-                async with session.post(url,data=json.dumps(payload, ensure_ascii=False), headers=headers) as response:
-                    text = await response.text()
+                if text.strip() == "":
+                    continue
+                
+                break
 
 
     return text
