@@ -56,13 +56,13 @@ async def get_gpt(text):
             async with session.post(url,data=json.dumps(payload, ensure_ascii=False), headers=headers) as response:
                 text = await response.text()
                 
-                text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
-                text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
+                try:
+                    text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
+                    text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
+                    break
+                except:
+                    pass
 
-                if text.strip() == "":
-                    continue
-                
-                break
 
 
     return text
@@ -123,13 +123,14 @@ async def reply(twitter, status):
     
     text =  "\n".join(memory) + "\nBot: "
 
-    result = await get_response(text)
+    result = None
 
-    while is_bad(result):
-        result = await get_response(text)
-    
-    print("-" * 30)
-    print(text + result)
-    print("-" * 30)
-    
-    twitter.update_status(result, in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
+    while True:
+        try:
+            twitter.update_status(result, in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
+            break
+        except:
+            result = await get_response(text)
+
+            while is_bad(result):
+                result = await get_response(text)
