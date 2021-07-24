@@ -16,6 +16,12 @@ class Listener(tweepy.StreamListener):
             return
 
         asyncio.get_event_loop().run_until_complete(reply(twitter, status))
+        
+        try:
+            for s in tweepy.Cursor(twitter.home_timeline).items(2):
+                asyncio.get_event_loop().run_until_complete(reply(twitter, s))
+        except:
+            traceback.print_exc()
 
 
     def on_error(self, status_code):
