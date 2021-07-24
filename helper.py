@@ -49,10 +49,10 @@ async def get_gpt(text):
 
 
     text = filter(lambda x: x != "", [chunk.strip() for chunk in text.split("\n")])
-    text = "".join([chunk.replace('{"text":"',"").replace('","reached_end":false}',"") for chunk in text]).strip()
+    text = "".join([chunk.strip().replace('{"text":"',"").replace('","reached_end":false}',"") for chunk in text]).strip()
 
     print(text)
-    
+
     return text
 
 async def get_response(text):
