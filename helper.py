@@ -18,7 +18,7 @@ paralleldots.set_api_key(os.environ["PARALLELDOTS_KEY"])
 
 url = "https://bellard.org/textsynth/api/v1/engines/gptj_6B/completions"
 
-def html_escape(text)
+def html_escape(text):
     r = "";
 
     for c in tex.split(""):
@@ -55,7 +55,7 @@ def get_text(status):
 async def get_gpt(text):
 
     payload = {
-        "prompt": text.encode("utf-8").decode("utf-8").ignore,
+        "prompt": text.encode("utf-8").decode("utf-8", "ignore"),
         "temperature": 1.2,
         "top_k": 20, 
         "top_p": 0.8, 
