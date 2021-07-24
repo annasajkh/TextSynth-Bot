@@ -11,6 +11,7 @@ import re
 
 import time
 import random
+import traceback
 
 paralleldots.set_api_key(os.environ["PARALLELDOTS_KEY"])
 
@@ -38,11 +39,26 @@ async def get_gpt(text):
         "temperature": 1,
         "top_k": 40, 
         "top_p": 0.9, 
-        "seed": 0
+        "seed": 0,
+        "stream": True
+    }
+
+    headers = {
+        "Accept":"*/*",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Connection": "keep-alive",
+        "Content-Type": "application/json",
+        "Sec-GPC": "1",
+        "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0",
+        "Referer": "https://bellard.org/textsynth/",
+        "Origin": "https://bellard.org",
+        "Host":"bellard.org"
+
     }
     
     async with aiohttp.ClientSession() as session:
-        async with session.post(url,data=json.dumps(payload)) as response:
+        async with session.post(url,data=json.dumps(payload), headers=headers) as response:
             text = await response.text()
 
 
