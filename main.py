@@ -20,6 +20,8 @@ class Listener(tweepy.StreamListener):
 
         if status.user.screen_name == "TextSynth":
             return
+
+        attempt = 0
         
         async def container():
             while True:
@@ -27,7 +29,11 @@ class Listener(tweepy.StreamListener):
                     await reply(twitter, status)
                     break
                 except:
-                    pass
+                    attempt += 1
+
+                    if attempt > 10:
+                        print("error max attempt reached...")
+                        break
         asyncio.get_event_loop().run_until_complete(container())
 
 
