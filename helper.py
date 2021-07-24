@@ -60,7 +60,7 @@ async def get_gpt(text):
 
 async def get_response(text):
     result = await get_gpt(text)
-    result = re.split(".*?:",result)[0].strip()[:280]
+    result = re.split(".*?:",result)[0].strip().split("\n")[0][:280]
     return result
 
 
