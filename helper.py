@@ -1,5 +1,4 @@
 import re
-import asyncio
 import aiohttp
 
 from profanity_check import predict
@@ -11,7 +10,6 @@ import re
 
 import time
 import random
-import traceback
 
 paralleldots.set_api_key(os.environ["PARALLELDOTS_KEY"])
 
@@ -83,6 +81,12 @@ def is_bad(text):
 
 
 async def reply(twitter, status):
+    time.sleep(random.uniform(0,2))
+
+    try:
+        twitter.create_favorite(status.id)
+    except:
+        return
 
     memory = []
 

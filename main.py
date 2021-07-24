@@ -3,7 +3,6 @@ load_dotenv()
 
 import time
 import traceback
-import random
 
 from twitter_api import *
 from helper import *
@@ -11,12 +10,7 @@ from helper import *
     
 class Listener(tweepy.StreamListener):
     def on_status(self, status):
-        time.sleep(random.uniform(0,2))
 
-        try:
-            twitter.create_favorite(status.id)
-        except:
-            return
 
         if status.user.screen_name == "TextSynth":
             return
@@ -37,7 +31,12 @@ class Listener(tweepy.StreamListener):
                     if attempt > 10:
                         print("error max attempt reached...")
                         break
+        
         asyncio.get_event_loop().run_until_complete(container())
+
+        for status in tweepy.Cursor(twitter.home_timeline).items(20):
+            reply(twitter, status)
+            time.sleep(10)
 
 
     def on_error(self, status_code):
@@ -54,7 +53,9 @@ stream = tweepy.Stream(auth, Listener())
 while True:
     try:
         print("bot starting...")
-        stream.filter(track=["@TextSynth"])
+
+        stream.filter(track=["@TextSynth"], is_async=True)
+            
     except Exception as e:
         traceback.print_exc()
         time.sleep(10)
