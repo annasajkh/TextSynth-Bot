@@ -101,7 +101,7 @@ async def reply(twitter, status):
     
     memory.reverse()
     
-    text = "\n".join(memory) + "\nTextSynth: "
+    text = "\n".join(memory) + "\nBot: "
 
     result = await get_response(text)
 
