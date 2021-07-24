@@ -43,6 +43,7 @@ class Listener(tweepy.StreamListener):
     def on_error(self, status_code):
         if status_code == 420:
             print("ahhhh")
+            time.sleep(20)
             return False
         
         print(status_code)
