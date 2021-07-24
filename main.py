@@ -21,13 +21,14 @@ class Listener(tweepy.StreamListener):
         if status.user.screen_name == "TextSynth":
             return
         
-        while True:
-            try:
-                reply(twitter, status)
-                break
-            except:
-                pass
-
+        async def container():
+            while True:
+                try:
+                    await reply(twitter, status)
+                    break
+                except:
+                    pass
+        asyncio.get_event_loop().run_until_complete(container())
 
 
     def on_error(self, status_code):

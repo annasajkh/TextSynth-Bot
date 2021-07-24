@@ -74,7 +74,7 @@ def is_bad(text):
     return False
 
 
-def reply(twitter, status):
+async def reply(twitter, status):
 
     memory = []
 
@@ -98,10 +98,10 @@ def reply(twitter, status):
     
     text = "\n".join(memory) + "\nTextSynth: "
 
-    result = asyncio.get_event_loop().run_until_complete(get_response(text))
+    result = await get_response(text)
 
     while is_bad(result):
-        result = asyncio.get_event_loop().run_until_complete(get_response(text))
+        result = await get_response(text)
     
     print("-" * 30)
     print(text + result)
