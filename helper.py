@@ -39,9 +39,9 @@ async def get_gpt(text):
 
     payload = {
         "prompt": text.encode("utf-8").decode("utf-8", "ignore"),
-        "temperature": 1.2,
-        "top_k": 20, 
-        "top_p": 0.8, 
+        "temperature": 1,
+        "top_k": 40, 
+        "top_p": 0.9, 
         "seed": 0
     }
 
@@ -50,16 +50,13 @@ async def get_gpt(text):
     }
     
     async with aiohttp.ClientSession() as session:
-        async with session.post(url,data=json.dumps(payload), headers=headers) as response:
+        async with session.post(url,data=json.dumps(payload, ensure_ascii=False), headers=headers) as response:
             text = await response.text()
 
+        text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
+        text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
 
-    text = [chunk for chunk in text.split("\n\n")]
-    print(list(text))
-    exit(0)
-    text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
-
-    return text
+        return text
 
 async def get_response(text):
     result = await get_gpt(text)
