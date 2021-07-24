@@ -18,8 +18,8 @@ class Listener(tweepy.StreamListener):
         asyncio.get_event_loop().run_until_complete(attempt_to_reply(twitter, status))
 
         try:
-            for status in tweepy.Cursor(twitter.home_timeline).items(20):
-                asyncio.get_event_loop().run_until_complete(attempt_to_reply(twitter, status))
+            for s in tweepy.Cursor(twitter.home_timeline).items(20):
+                asyncio.get_event_loop().run_until_complete(attempt_to_reply(twitter, s))
                 time.sleep(10)
         except:
             traceback.print_exc()
