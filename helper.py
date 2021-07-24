@@ -51,8 +51,8 @@ async def get_gpt(text):
     text = filter(lambda x: x != "", [chunk.strip() for chunk in text.split("\n")])
     print(list(text))
     text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
-
-    return text
+    
+    return text.encode("utf-8","ignore").decode()
 
 async def get_response(text):
     result = await get_gpt(text)
