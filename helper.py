@@ -69,7 +69,9 @@ async def get_gpt(text):
 
 async def get_response(text):
     result = await get_gpt(text)
-    result = re.split(".*?:",result)[0].strip().split("\n")[0][:280]
+    result = re.split(".*?:",result)[0].strip()[:280]
+    result = re.sub("\n", " ", result)
+
     return result
 
 
@@ -123,7 +125,10 @@ async def reply(twitter, status):
     
     text =  "\n".join(memory) + "\nBot: "
 
-    result = None
+    result = await get_response(text)
+
+    while is_bad(result):
+        result = await get_response(text)
 
     while True:
         try:
