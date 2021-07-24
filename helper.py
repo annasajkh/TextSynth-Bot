@@ -10,6 +10,7 @@ import re
 
 import time
 import random
+import traceback
 
 paralleldots.set_api_key(os.environ["PARALLELDOTS_KEY"])
 
@@ -120,3 +121,19 @@ async def reply(twitter, status):
     print("-" * 30)
     
     twitter.update_status(result, in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
+
+async def attempt_to_reply(twitter, status):
+    attempt = 0
+
+    while True:
+        try:
+            print("attempting to reply...")
+            await reply(twitter, status)
+            break
+        except:
+            traceback.print_exc()
+            attempt += 1
+
+            if attempt > 10:
+                print("error max attempt reached...")
+                break

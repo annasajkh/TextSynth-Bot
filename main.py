@@ -11,32 +11,18 @@ from helper import *
     
 class Listener(tweepy.StreamListener):
     def on_status(self, status):
-        
+
         if status.user.screen_name == "TextSynth":
             return
 
-        
-        async def container():
-            attempt = 0
+        asyncio.get_event_loop().run_until_complete(attempt_to_reply(twitter, status))
 
-            while True:
-                try:
-                    print("attempting to reply...")
-                    await reply(twitter, status)
-                    break
-                except:
-                    traceback.print_exc()
-                    attempt += 1
-
-                    if attempt > 10:
-                        print("error max attempt reached...")
-                        break
-        
-        asyncio.get_event_loop().run_until_complete(container()))
-
-        for status in tweepy.Cursor(twitter.home_timeline).items(20):
-            asyncio.get_event_loop().run_until_complete(reply(twitter, status))
-            time.sleep(10)
+        try:
+            for status in tweepy.Cursor(twitter.home_timeline).items(20):
+                asyncio.get_event_loop().run_until_complete(attempt_to_reply(twitter, status))
+                time.sleep(10)
+        except:
+            traceback.print_exc()
 
 
     def on_error(self, status_code):
