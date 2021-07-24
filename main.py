@@ -53,8 +53,7 @@ stream = tweepy.Stream(auth, Listener())
 while True:
     try:
         print("bot starting...")
-
-        stream.filter(track=["@TextSynth"], is_async=True)
+        stream.filter(track=["@TextSynth"])
             
     except Exception as e:
         traceback.print_exc()
