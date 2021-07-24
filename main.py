@@ -8,9 +8,6 @@ import random
 from twitter_api import *
 from helper import *
 
-print(asyncio.get_event_loop().run_until_complete(get_gpt("hello")))
-exit(0)
-
     
 class Listener(tweepy.StreamListener):
     def on_status(self, status):
