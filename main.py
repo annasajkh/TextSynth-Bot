@@ -3,6 +3,7 @@ load_dotenv()
 
 import time
 import traceback
+import asyncio
 
 from twitter_api import *
 from helper import *
