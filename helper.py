@@ -35,7 +35,7 @@ def get_text(status):
 async def get_gpt(text):
 
     payload = {
-        "prompt": text.encode("utf-8").decode("utf-8","ignore"),
+        "prompt": rf"{text}",
         "temperature": 1.2,
         "top_k": 20, 
         "top_p": 0.8, 
@@ -51,8 +51,8 @@ async def get_gpt(text):
     text = filter(lambda x: x != "", [chunk.strip() for chunk in text.split("\n")])
     print(list(text))
     text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
-    
-    return text.encode("utf-8").decode("utf-8","ignore")
+
+    return rf"{text}"
 
 async def get_response(text):
     result = await get_gpt(text)
