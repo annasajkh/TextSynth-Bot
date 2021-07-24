@@ -21,7 +21,7 @@ url = "https://bellard.org/textsynth/api/v1/engines/gptj_6B/completions"
 def html_escape(text):
     r = "";
 
-    for c in tex.split(""):
+    for c in text.split(""):
         if c == "<":
             r += "&lt;"
         elif c == ">":
@@ -59,8 +59,7 @@ async def get_gpt(text):
         "temperature": 1.2,
         "top_k": 20, 
         "top_p": 0.8, 
-        "seed": 0,
-        "stream": True
+        "seed": 0
     }
 
     headers = {
