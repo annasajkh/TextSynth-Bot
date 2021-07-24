@@ -54,7 +54,7 @@ stream = tweepy.Stream(auth, Listener())
 while True:
     try:
         print("bot starting...")
-        stream.filter(track=["@TextSynth", "@dril_gpt2", "@gpt2upguy", "@DeapLeffen"])
+        stream.filter(track=["@TextSynth", "@dril_gpt2", "@gpt2upguy", "@DeepLeffen"])
     except Exception as e:
         traceback.print_exc()
         time.sleep(10)
