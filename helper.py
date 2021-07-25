@@ -26,8 +26,11 @@ def build_text(status):
     text = re.sub("https://[^\s]+", "", text)
     text = re.sub("@[^\s]+", "", text)
     text = re.sub("\n", " ", text).strip()
-
-    return f"{status.user.screen_name}: {text}"
+    
+    if status.user.screen_name == "TextSynth":
+        return f"Bot: {text}"
+    else:
+        return f"{status.user.screen_name}: {text}"
 
 
 def get_text(status):
@@ -123,7 +126,7 @@ async def reply(twitter, status):
     
     memory.reverse()
     
-    text = finetune + "\n".join(memory) + "\nTextSynth: "
+    text = finetune + "\n".join(memory) + "\nBot: "
 
     result = await get_response(text)
 
