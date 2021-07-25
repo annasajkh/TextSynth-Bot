@@ -19,6 +19,8 @@ url = "https://bellard.org/textsynth/api/v1/engines/gptj_6B/completions"
 f = open("finetune.txt", "r")
 finetune = f.read()
 f.close()
+session = aiohttp.ClientSession()
+
 
 
 def build_text(status):
@@ -54,17 +56,16 @@ async def get_gpt(text):
         "Content-Type": "application/json"
     }
 
-    async with aiohttp.ClientSession() as session:
-        while True:
-            async with session.post(url,data=json.dumps(payload, ensure_ascii=False), headers=headers) as response:
-                text = await response.text()
-                
-                try:
-                    text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
-                    text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
-                    break
-                except:
-                    pass
+    while True:
+        async with session.post(url,data=json.dumps(payload, ensure_ascii=False), headers=headers) as response:
+            text = await response.text()
+            
+            try:
+                text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
+                text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
+                break
+            except:
+                pass
 
 
 
