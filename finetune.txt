@@ -1,0 +1,7 @@
+Jack: hello how are you?
+TextSynth: i'm feeling great, and you?
+Jack: i'm feeling great too
+Lisa: hey guys, what you been up to?
+Jack: nothing just chilling
+TextSynth: same, i'm bored
+Jack: yeah

@@ -10,12 +10,15 @@ import re
 
 import time
 import random
-import traceback
 
 paralleldots.set_api_key(os.environ["PARALLELDOTS_KEY"])
 
 
 url = "https://bellard.org/textsynth/api/v1/engines/gptj_6B/completions"
+
+f = open("finetune.txt", "r")
+finetune = f.read()
+f.close()
 
 
 def build_text(status):
@@ -24,10 +27,7 @@ def build_text(status):
     text = re.sub("@[^\s]+", "", text)
     text = re.sub("\n", " ", text).strip()
 
-    if status.user.screen_name == "TextSynth":
-        return f"Bot: {text}"
-    else:
-        return f"{status.user.screen_name}: {text}"
+    return f"{status.user.screen_name}: {text}"
 
 
 def get_text(status):
@@ -123,7 +123,7 @@ async def reply(twitter, status):
     
     memory.reverse()
     
-    text =  "\n".join(memory) + "\nBot: "
+    text =  finetune + "\n".join(memory) + "\nTextSynth: "
 
     result = await get_response(text)
 
