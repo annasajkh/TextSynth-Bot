@@ -29,10 +29,7 @@ def build_text(status):
     text = re.sub("@[^\s]+", "", text)
     text = re.sub("\n", " ", text).strip()
     
-    if status.user.screen_name == "TextSynth":
-        return f"Bot: {text}"
-    else:
-        return f"{status.user.screen_name}: {text}"
+    return f"{status.user.screen_name} [SEP] {text}"
 
 
 def get_text(status):
@@ -77,7 +74,7 @@ async def get_gpt(text):
 
 async def get_response(text):
     result = await get_gpt(text)
-    result = re.split(".*?:",result)[0].strip()[:280]
+    result = re.split(".*? [SEP] ",result)[0].strip()[:280]
     result = re.sub("\n", " ", result)
 
     return result
@@ -131,7 +128,7 @@ async def reply(twitter, status):
     
     memory.reverse()
     
-    text = finetune + "\n".join(memory) + "\nBot: "
+    text = finetune + "\n".join(memory) + "\nTextSynth [SEP] "
 
     result = await get_response(text)
 
