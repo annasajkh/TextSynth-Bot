@@ -18,10 +18,6 @@ class Listener(tweepy.StreamListener):
 
         asyncio.get_event_loop().run_until_complete(reply(twitter, status))
 
-        if random.random() > 0.9:
-            for status in tweepy.Cursor(twitter.home_timeline).items(4):
-                asyncio.get_event_loop().run_until_complete(reply(twitter, status))
-
     def on_error(self, status_code):
         if status_code == 420:
             print("ahhhh")
@@ -35,7 +31,9 @@ stream = tweepy.Stream(auth, Listener())
 while True:
     try:
         print("bot starting...")
-        stream.filter(track=["@TextSynth"], follow=[text_synth])
+        stream.filter(track=["@TextSynth"], follow=[text_synth], is_async=True)
     except Exception as e:
         traceback.print_exc()
-        time.sleep(10)
+        for status in tweepy.Cursor(twitter.home_timeline).items(4):
+                asyncio.get_event_loop().run_until_complete(reply(twitter, status))
+        time.sleep(60 * 60)
