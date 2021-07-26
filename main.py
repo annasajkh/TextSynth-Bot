@@ -25,7 +25,7 @@ class Listener(tweepy.StreamListener):
             twitter.update_status(text)
 
             for status in tweepy.Cursor(twitter.home_timeline).items(4):
-                reply(twitter, status)
+                asyncio.get_event_loop().run_until_complete(reply(twitter, status))
 
     def on_error(self, status_code):
         if status_code == 420:
