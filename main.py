@@ -8,9 +8,6 @@ import asyncio
 from twitter_api import *
 from helper import *
 
-dril_gpt2 = twitter.get_user("dril_gpt2").id_str
-make_up_a_guy_gpt = twitter.get_user("gpt2upaguy").id_str
-deep_leffen = twitter.get_user("DeepLeffen").id_str
 text_synth = twitter.get_user("TextSynth").id_str
     
 class Listener(tweepy.StreamListener):
@@ -27,6 +24,8 @@ class Listener(tweepy.StreamListener):
 
             twitter.update_status(text)
 
+            for status in tweepy.Cursor(twitter.home_timeline).items(4):
+                reply(twitter, status)
 
     def on_error(self, status_code):
         if status_code == 420:
@@ -41,7 +40,7 @@ stream = tweepy.Stream(auth, Listener())
 while True:
     try:
         print("bot starting...")
-        stream.filter(track=["@TextSynth"], follow=[dril_gpt2, make_up_a_guy_gpt, deep_leffen, text_synth])
+        stream.filter(track=["@TextSynth"], follow=[text_synth])
     except Exception as e:
         traceback.print_exc()
         time.sleep(10)
