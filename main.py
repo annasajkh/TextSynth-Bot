@@ -16,12 +16,9 @@ class Listener(tweepy.StreamListener):
         if status.user.screen_name == "TextSynth":
             return
 
-        if random.random() > 0.8:
-            text = asyncio.get_event_loop().run_until_complete(get_gpt(finetune + "\nBot: "))
-            text = re.split(".*?:",text)[0].strip()[:280]
+        asyncio.get_event_loop().run_until_complete(reply(twitter, status))
 
-            twitter.update_status(text)
-
+        if random.random() > 0.9:
             for status in tweepy.Cursor(twitter.home_timeline).items(4):
                 asyncio.get_event_loop().run_until_complete(reply(twitter, status))
 
