@@ -64,9 +64,9 @@ async def get_gpt(text):
                 text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
                 text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
 
-                if "??" in text:
+                if "??" in text or "!!" in text:
                     continue
-                
+
                 break
             except:
                 pass
