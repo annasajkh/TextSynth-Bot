@@ -18,7 +18,7 @@ class Listener(tweepy.StreamListener):
 
         asyncio.get_event_loop().run_until_complete(reply(twitter, status))
 
-        if random.random() > 0.99:
+        if random.random() > 0.8:
             text = asyncio.get_event_loop().run_until_complete(get_gpt(finetune + "\nBot: "))
             text = re.split(".*?:",text)[0].strip()[:280]
 
