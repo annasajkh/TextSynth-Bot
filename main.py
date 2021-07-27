@@ -8,8 +8,6 @@ import asyncio
 from twitter_api import *
 from helper import *
 
-text_synth = twitter.get_user("TextSynth").id_str
-    
 class Listener(tweepy.StreamListener):
     def on_status(self, status):
 
@@ -39,7 +37,7 @@ stream = tweepy.Stream(auth, Listener())
 while True:
     try:
         print("bot starting...")
-        stream.filter(track=["@TextSynth"], follow=[text_synth])
+        stream.filter(track=["@TextSynth"])
     except Exception as e:
         traceback.print_exc()
         time.sleep(10)
