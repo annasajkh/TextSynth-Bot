@@ -42,7 +42,7 @@ def get_text(status):
 async def get_gpt(text):
 
     payload = {
-        "prompt": text.encode("utf-8").decode("utf-8", "ignore"),
+        "prompt": text,
         "temperature": 1,
         "top_k": 40, 
         "top_p": 0.9, 
