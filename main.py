@@ -16,6 +16,8 @@ class Listener(tweepy.StreamListener):
         if status.user.screen_name == "TextSynth":
             return
 
+        print("trying to reply to " + status.user.screen_name)
+
         asyncio.get_event_loop().run_until_complete(reply(twitter, status))
 
         if random.random() > 0.99:
