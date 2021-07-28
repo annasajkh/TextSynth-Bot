@@ -3,7 +3,6 @@ load_dotenv()
 
 import time
 import traceback
-import asyncio
 
 from twitter_api import *
 from helper import *
@@ -52,7 +51,7 @@ def tweet_thread(thread_name):
             continue
 
         for status in tweepy.Cursor(twitter.home_timeline).items(10):
-            await reply(status)
+            reply(twitter, status)
 
         time.sleep(60 * 60)
 
