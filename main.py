@@ -50,7 +50,7 @@ def tweet_thread(thread_name):
         except:
             continue
 
-        for status in tweepy.Cursor(twitter.home_timeline).items(10):
+        for status in tweepy.Cursor(twitter.home_timeline).items(5):
             reply(twitter, status)
 
         time.sleep(60 * 60)
