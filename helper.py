@@ -28,7 +28,10 @@ def build_text(status):
     text = re.sub("@[^\s]+", "", text)
     text = re.sub("\n", " ", text).strip()
     
-    return f"{status.user.screen_name}: {text}"
+    if status.user.name == "TextSynth":
+        return f"Bot: {text}"
+    else:
+        return f"{status.user.screen_name}: {text}"
 
 
 def get_text(status):
