@@ -27,7 +27,7 @@ def build_text(status):
     text = re.sub("@[^\s]+", "", text)
     text = re.sub("\n", " ", text).strip()
     
-    return f" __eou__ {text}"
+    return f"\n{text}"
 
 
 def get_text(status):
@@ -72,7 +72,7 @@ def get_gpt(text):
 
 def get_response(text):
     result = get_gpt(text)
-    result = re.split("__eou__",result)[0].strip()[:280]
+    result = re.split("\n",result)[0].strip()[:280]
     result = re.sub("\n", " ", result)
 
     return result
@@ -118,7 +118,7 @@ def reply(twitter, status):
     
     memory.reverse()
     
-    text = finetune + " __eou__ ".join(memory) + " __eou__ "
+    text = finetune + "\n".join(memory) + "\n"
 
     print("make API requests")
 
