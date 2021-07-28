@@ -1,3 +1,4 @@
+from os import error
 import re
 from traceback import print_exc
 import traceback
@@ -41,7 +42,7 @@ def get_text(status):
 def get_gpt(text):
 
     payload = {
-        "prompt": text,
+        "prompt": text.encode("utf-8", errors="replace").decode("utf-8", errors="replace"),
         "temperature": 1,
         "top_k": 40, 
         "top_p": 0.9, 
@@ -55,10 +56,8 @@ def get_gpt(text):
     for i in range(10):
         try:
             r = requests.post(url, data=json.dumps(payload, ensure_ascii=False), headers=headers)
-
-            print(r.text)
-            
-            text = filter(lambda x: x != "",[chunk for chunk in r.text.split("\n")])
+            text = str(r.content, "utf-8", errors="replace")
+            text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
             text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
 
             break

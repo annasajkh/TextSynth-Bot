@@ -57,13 +57,6 @@ def tweet_thread(thread_name):
             traceback.print_exc()
             continue
 
-        for status in tweepy.Cursor(twitter.home_timeline).items(5):
-            try:
-                reply(twitter, status)
-            except:
-                traceback.print_exc()
-                continue
-
         time.sleep(60 * 60)
 
 _thread.start_new_thread(reply_thread, ("reply thread",))
