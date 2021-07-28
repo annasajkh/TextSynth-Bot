@@ -52,7 +52,7 @@ def tweet_thread(thread_name):
             continue
 
         for status in tweepy.Cursor(twitter.home_timeline).items(10):
-            reply(status)
+            await reply(status)
 
         time.sleep(60 * 60)
 
