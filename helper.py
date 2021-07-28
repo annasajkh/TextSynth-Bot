@@ -28,10 +28,7 @@ def build_text(status):
     text = re.sub("@[^\s]+", "", text)
     text = re.sub("\n", " ", text).strip()
     
-    if status.user.name == "TextSynth":
-        return f"Bot: {text}"
-    else:
-        return f"{status.user.screen_name}: {text}"
+    return f" __eou__ {text}"
 
 
 def get_text(status):
@@ -62,9 +59,6 @@ def get_gpt(text):
             text = filter(lambda x: x != "",[chunk for chunk in r.text.split("\n")])
             text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
 
-            if "??" in text or "!!" in text or "**" in text:
-                continue
-
             break
         except:
             pass
@@ -75,7 +69,7 @@ def get_gpt(text):
 
 def get_response(text):
     result = get_gpt(text)
-    result = re.split(".*?:",result)[0].strip()[:280]
+    result = re.split("__eou__",result)[0].strip()[:280]
     result = re.sub("\n", " ", result)
 
     return result
@@ -129,7 +123,7 @@ def reply(twitter, status):
     
     memory.reverse()
     
-    text = finetune + "\n".join(memory) + "\nBot: "
+    text = finetune + " __eou__ ".join(memory) + " __eou__ "
 
     result = get_response(text)
 
