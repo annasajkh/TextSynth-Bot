@@ -114,6 +114,8 @@ def reply(twitter, status):
     
     text = finetune + " __eou__ ".join(memory) + " __eou__ "
 
+    print("make API requests")
+
     result = get_response(text)
 
     print(result)
