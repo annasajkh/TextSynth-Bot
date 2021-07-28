@@ -132,3 +132,4 @@ def reply(twitter, status):
 
             while is_bad(result):
                 result = get_response(text)
+                print(result)
