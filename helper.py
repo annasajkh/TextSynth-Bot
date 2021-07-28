@@ -1,5 +1,6 @@
 import re
 from traceback import print_exc
+import traceback
 import requests
 
 from profanity_check import predict
@@ -15,7 +16,7 @@ import random
 url = "https://bellard.org/textsynth/api/v1/engines/gptj_6B/completions"
 
 f = open("finetune.txt", "r")
-finetune = f.read().encode("utf-8").decode("utf-8", "ignore")
+finetune = f.read()
 f.close()
 
 
@@ -50,7 +51,7 @@ def get_gpt(text):
         "Content-Type": "text/text; charset=utf-8"
     }
 
-    while True:
+    for i in range(10):
         try:
             r = requests.post(url, data=json.dumps(payload, ensure_ascii=False), headers=headers)
 
@@ -60,8 +61,9 @@ def get_gpt(text):
             text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
 
             break
-        except:
+        except Exception as e:
             print_exc()
+            text = str(e)
             pass
 
 
@@ -133,6 +135,7 @@ def reply(twitter, status):
             twitter.update_status(result, in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
             break
         except:
+            traceback.print_exc()
             print(result)
             result = get_response(text)
 

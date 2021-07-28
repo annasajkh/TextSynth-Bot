@@ -53,7 +53,7 @@ def tweet_thread(thread_name):
 
         try:
             twitter.update_status(text)
-        except Exception as e:
+        except:
             traceback.print_exc()
             continue
 
@@ -65,9 +65,9 @@ def tweet_thread(thread_name):
                 continue
 
         time.sleep(60 * 60)
-print(finetune)
-print(len(finetune.split("__eou__")))
-print(get_gpt(finetune))
 
 _thread.start_new_thread(reply_thread, ("reply thread",))
 _thread.start_new_thread(tweet_thread, ("tweet thread",))
+
+while 1:
+    pass
