@@ -49,7 +49,7 @@ def get_gpt(text):
     }
 
     headers = {
-        "Content-Type": "text/text; charset=utf-8"
+        "Content-Type": "application/json"
     }
 
     for i in range(10):
