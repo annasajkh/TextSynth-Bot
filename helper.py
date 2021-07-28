@@ -53,7 +53,7 @@ def get_gpt(text):
 
     for i in range(10):
         try:
-            r = requests.post(url, data=json.dumps(payload, ensure_ascii=False), headers=headers)
+            r = requests.post(url, data=json.dumps(payload, ensure_ascii=False), headers=headers, timeout=3)
 
             print(r.text)
             
