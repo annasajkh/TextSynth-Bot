@@ -3,15 +3,12 @@ import requests
 
 from profanity_check import predict
 from better_profanity import profanity
-import paralleldots
-import os
 import json
 import re
 
 import time
 import random
 
-paralleldots.set_api_key(os.environ["PARALLELDOTS_KEY"])
 
 
 url = "https://bellard.org/textsynth/api/v1/engines/gptj_6B/completions"
@@ -79,14 +76,6 @@ def is_bad(text):
     if predict([text])[0] > 0.5 or profanity.contains_profanity(text):
         return True
     
-    try:
-        result = paralleldots.abuse(text)
-
-        if result["abusive"] > 0.5:
-            return True
-    except:
-        return False
-    
     return False
 
 
@@ -127,14 +116,18 @@ def reply(twitter, status):
 
     result = get_response(text)
 
+    print(result)
+
     while is_bad(result):
         result = get_response(text)
+        print(result)
 
     while True:
         try:
             twitter.update_status(result, in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
             break
         except:
+            print(result)
             result = get_response(text)
 
             while is_bad(result):
