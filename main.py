@@ -57,7 +57,7 @@ def tweet_thread(thread_name):
             traceback.print_exc()
             continue
 
-        for status in tweepy.Cursor(twitter.home_timeline).items(5):
+        for status in tweepy.Cursor(twitter.home_timeline).items(20):
             try:
                 reply(twitter, status)
             except:

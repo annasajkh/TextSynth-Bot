@@ -86,6 +86,9 @@ def is_bad(text):
 
 
 def reply(twitter, status):
+    if status.user.name == "TextSynth":
+        return
+    
     time.sleep(random.uniform(0,2))
 
     try:
