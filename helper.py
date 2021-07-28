@@ -1,5 +1,5 @@
 import re
-import aiohttp
+import requests
 
 from profanity_check import predict
 from better_profanity import profanity
@@ -19,7 +19,6 @@ url = "https://bellard.org/textsynth/api/v1/engines/gptj_6B/completions"
 f = open("finetune.txt", "r")
 finetune = f.read()
 f.close()
-session = aiohttp.ClientSession()
 
 
 
@@ -39,7 +38,7 @@ def get_text(status):
         return status.text
 
 
-async def get_gpt(text):
+def get_gpt(text):
 
     payload = {
         "prompt": text,
@@ -54,26 +53,25 @@ async def get_gpt(text):
     }
 
     while True:
-        async with session.post(url,data=json.dumps(payload, ensure_ascii=False), headers=headers) as response:
-            text = await response.text()
+        try:
+            r = requests.post(url, data=json.dumps(payload, ensure_ascii=False))
             
-            try:
-                text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
-                text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
+            text = filter(lambda x: x != "",[chunk for chunk in r.text.split("\n")])
+            text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
 
-                if "??" in text or "!!" in text or "**" in text:
-                    continue
+            if "??" in text or "!!" in text or "**" in text:
+                continue
 
-                break
-            except:
-                pass
+            break
+        except:
+            pass
 
 
 
     return text
 
-async def get_response(text):
-    result = await get_gpt(text)
+def get_response(text):
+    result = get_gpt(text)
     result = re.split(".*?:",result)[0].strip()[:280]
     result = re.sub("\n", " ", result)
 
@@ -95,7 +93,7 @@ def is_bad(text):
     return False
 
 
-async def reply(twitter, status):
+def reply(twitter, status):
     time.sleep(random.uniform(0,2))
 
     try:
@@ -130,17 +128,17 @@ async def reply(twitter, status):
     
     text = finetune + "\n".join(memory) + "\nBot: "
 
-    result = await get_response(text)
+    result = get_response(text)
 
     while is_bad(result):
-        result = await get_response(text)
+        result = get_response(text)
 
     while True:
         try:
             twitter.update_status(result, in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
             break
         except:
-            result = await get_response(text)
+            result = get_response(text)
 
             while is_bad(result):
-                result = await get_response(text)
+                result = get_response(text)
