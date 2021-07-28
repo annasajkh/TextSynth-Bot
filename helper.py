@@ -1,6 +1,7 @@
 import re
 from traceback import print_exc
 import traceback
+from typing import Text
 import requests
 
 from profanity_check import predict
@@ -63,7 +64,7 @@ def get_gpt(text):
             break
         except Exception as e:
             print_exc()
-            text = str(e)
+            text = ""
             pass
 
 
@@ -133,15 +134,7 @@ def reply(twitter, status):
         result = get_response(text)
         print(result)
 
-    while True:
-        try:
-            twitter.update_status(result, in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
-            break
-        except:
-            traceback.print_exc()
-            print(result)
-            result = get_response(text)
-
-            while is_bad(result):
-                result = get_response(text)
-                print(result)
+    try:
+        twitter.update_status(result, in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
+    except:
+        traceback.print_exc()
