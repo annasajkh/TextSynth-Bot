@@ -1,4 +1,5 @@
 import re
+from traceback import print_exc
 import requests
 
 from profanity_check import predict
@@ -14,7 +15,7 @@ import random
 url = "https://bellard.org/textsynth/api/v1/engines/gptj_6B/completions"
 
 f = open("finetune.txt", "r")
-finetune = f.read()
+finetune = f.read().encode("utf-8").decode("utf-8", "ignore")
 f.close()
 
 
@@ -46,18 +47,21 @@ def get_gpt(text):
     }
 
     headers = {
-        "Content-Type": "application/json"
+        "Content-Type": "text/text; charset=utf-8"
     }
 
     while True:
         try:
-            r = requests.post(url, data=json.dumps(payload, ensure_ascii=False))
+            r = requests.post(url, data=json.dumps(payload, ensure_ascii=False), headers=headers)
+
+            print(r.text)
             
             text = filter(lambda x: x != "",[chunk for chunk in r.text.split("\n")])
             text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
 
             break
         except:
+            print_exc()
             pass
 
 

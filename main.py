@@ -8,8 +8,10 @@ from twitter_api import *
 from helper import *
 import _thread
 
+
 def reply_thread(thread_name):
     print(thread_name + " starting")
+
 
     class Listener(tweepy.StreamListener):
         def on_status(self, status):
@@ -19,7 +21,10 @@ def reply_thread(thread_name):
 
             print("trying to reply to " + status.user.screen_name)
 
-            reply(twitter, status)
+            try:
+                reply(twitter, status)
+            except:
+                traceback.print_exc()
 
         def on_error(self, status_code):
             if status_code == 420:
@@ -45,18 +50,24 @@ def tweet_thread(thread_name):
     while True:
         text = get_gpt(finetune + " __eou__ ")
         text = re.split("__eou__",text)[0].strip()[:280]
+
         try:
             twitter.update_status(text)
-        except:
+        except Exception as e:
+            traceback.print_exc()
             continue
 
         for status in tweepy.Cursor(twitter.home_timeline).items(5):
-            reply(twitter, status)
+            try:
+                reply(twitter, status)
+            except:
+                traceback.print_exc()
+                continue
 
         time.sleep(60 * 60)
+print(finetune)
+print(len(finetune.split("__eou__")))
+print(get_gpt(finetune))
 
 _thread.start_new_thread(reply_thread, ("reply thread",))
 _thread.start_new_thread(tweet_thread, ("tweet thread",))
-
-while 1:
-    pass
