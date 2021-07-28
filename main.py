@@ -46,8 +46,10 @@ def tweet_thread(thread_name):
     while True:
         text = get_gpt(finetune + "\nBot: ")
         text = re.split(".*?:",text)[0].strip()[:280]
-
-        twitter.update_status(text)
+        try:
+            twitter.update_status(text)
+        except:
+            continue
 
         time.sleep(60 * 60)
 
