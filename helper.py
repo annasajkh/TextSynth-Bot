@@ -25,7 +25,6 @@ f.close()
 
 def build_text(status):
     text = get_text(status)
-    text = re.sub("https://[^\s]+", "", text)
     text = re.sub("@[^\s]+", "", text)
     text = re.sub("\n", " ", text).strip()
     
