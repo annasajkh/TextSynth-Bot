@@ -1,26 +1,4 @@
-from os import error
-import re
-from traceback import print_exc
-import traceback
-from typing import Text
-import requests
-
-from profanity_check import predict
-from better_profanity import profanity
-import json
-import re
-
-import time
-import random
-
-
-
-url = "https://bellard.org/textsynth/api/v1/engines/gptj_6B/completions"
-
-f = open("finetune.txt", "r")
-finetune = f.read()
-f.close()
-
+from setup import *
 
 
 def build_text(status):
@@ -43,7 +21,8 @@ def get_text(status):
         return status.text
 
 
-def get_gpt(text):
+async def get_gpt(text):
+    session = await get_session()
 
     payload = {
         "prompt": text,
@@ -63,18 +42,20 @@ def get_gpt(text):
 
     for i in range(20):
         try:
-            r = requests.post(url, data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), headers=headers)
-            
-            try:
-                text = str(r.content, "utf-8")
-            except:
-                text = str(r.content, "utf-8", errors="replace")
-            
-            text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
-            text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
+            async with session.post(url, data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), headers=headers)as response:
+                
+                content = await response.content.read()
 
-            if len(text) < 10:
-                continue
+                try:
+                    text = str(content, "utf-8")
+                except:
+                    text = str(content, "utf-8", errors="replace")
+                
+                text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
+                text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
+
+                if len(text) < 10:
+                    continue
 
             break
         except Exception as e:
@@ -85,8 +66,8 @@ def get_gpt(text):
 
     return text
 
-def get_response(text):
-    result = get_gpt(text)
+async def get_response(text):
+    result = await get_gpt(text)
     result = re.split(".*?:",result)[0].strip()[:280]
     result = re.sub("\n", " ", result)
 
@@ -100,7 +81,7 @@ def is_bad(text):
     return False
 
 
-def reply(twitter, status):
+async def reply(twitter, status):
     time.sleep(random.uniform(0,2))
 
     try:
@@ -131,12 +112,12 @@ def reply(twitter, status):
 
     print("make API requests")
 
-    result = get_response(text)
+    result = await get_response(text)
 
     print(result)
 
     while is_bad(result):
-        result = get_response(text)
+        result = await get_response(text)
         print(result)
 
     try:

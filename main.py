@@ -1,3 +1,4 @@
+import asyncio
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -12,6 +13,10 @@ import _thread
 def reply_thread(thread_name):
     print(thread_name + " starting")
 
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    
+
 
     class Listener(tweepy.StreamListener):
         def on_status(self, status):
@@ -22,7 +27,7 @@ def reply_thread(thread_name):
             print("trying to reply to " + status.user.screen_name)
 
             try:
-                reply(twitter, status)
+                loop.run_until_complete(reply(twitter, status))
             except:
                 traceback.print_exc()
 
@@ -45,10 +50,15 @@ def reply_thread(thread_name):
             time.sleep(10)
 
 def tweet_thread(thread_name):
+    
     print(thread_name + " starting")
+    
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    
 
     while True:
-        text = get_gpt(finetune + "\nJack:")
+        text = loop.run_until_complete(get_gpt(finetune + "\nJack:"))
         text = re.split(".*?:",text)[0].strip()[:280]
 
         try:
@@ -58,6 +68,7 @@ def tweet_thread(thread_name):
             continue
 
         time.sleep(60 * 60)
+
 
 _thread.start_new_thread(reply_thread, ("reply thread",))
 _thread.start_new_thread(tweet_thread, ("tweet thread",))
