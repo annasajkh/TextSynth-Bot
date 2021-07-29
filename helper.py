@@ -59,7 +59,9 @@ def get_gpt(text):
         "Content-Type": "application/json; charset=utf-8"
     }
 
-    for i in range(10):
+    text = ""
+
+    for i in range(20):
         try:
             r = requests.post(url, data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), headers=headers)
             
@@ -67,10 +69,12 @@ def get_gpt(text):
             text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
             text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
 
+            if len(text) < 10:
+                continue
+
             break
         except Exception as e:
             print_exc()
-            text = ""
             pass
 
 
