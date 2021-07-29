@@ -56,7 +56,7 @@ def get_gpt(text):
         try:
             r = None
             try:
-                r = requests.post(url, data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), headers=headers, timeout=3)
+                r = requests.post(url, data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), headers=headers, timeout=5)
             except:
                 print_exc()
             text = str(r.content, "utf-8", errors="replace")
