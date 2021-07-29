@@ -27,11 +27,13 @@ def build_text(status):
     text = get_text(status)
     text = re.sub("@[^\s]+", "", text)
     text = re.sub("\n", " ", text).strip()
+
+    name = status.user.screen_name.replace(":", "")
     
-    if status.user.name == "TextSynth":
+    if status.user.screen_name == "TextSynth":
         return f"AI: {text}"
     else:
-        return f"{status.user.name}: {text}"
+        return f"{name}: {text}"
 
 
 def get_text(status):
