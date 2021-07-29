@@ -15,6 +15,8 @@ def reply_thread(thread_name):
 
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
+
+    session = loop.run_until_complete(get_session())
     
 
 
@@ -27,7 +29,7 @@ def reply_thread(thread_name):
             print("trying to reply to " + status.user.screen_name)
 
             try:
-                loop.run_until_complete(reply(twitter, status))
+                loop.run_until_complete(reply(twitter, status, session))
             except:
                 traceback.print_exc()
 
@@ -55,10 +57,11 @@ def tweet_thread(thread_name):
     
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
+    session = loop.run_until_complete(get_session())
     
 
     while True:
-        text = loop.run_until_complete(get_gpt(finetune + "\nJack:"))
+        text = loop.run_until_complete(get_gpt(finetune + "\nJack:", session))
         text = re.split(".*?:",text)[0].strip()[:280]
 
         try:

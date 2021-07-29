@@ -21,8 +21,7 @@ def get_text(status):
         return status.text
 
 
-async def get_gpt(text):
-    session = await get_session()
+async def get_gpt(text, session):
 
     payload = {
         "prompt": text,
@@ -42,7 +41,7 @@ async def get_gpt(text):
 
     for i in range(20):
         try:
-            async with session.post(url, data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), headers=headers)as response:
+            async with session.post(url, data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), headers=headers) as response:
                 
                 content = await response.content.read()
 
@@ -66,8 +65,8 @@ async def get_gpt(text):
 
     return text
 
-async def get_response(text):
-    result = await get_gpt(text)
+async def get_response(text, session):
+    result = await get_gpt(text, session)
     result = re.split(".*?:",result)[0].strip()[:280]
     result = re.sub("\n", " ", result)
 
@@ -81,7 +80,7 @@ def is_bad(text):
     return False
 
 
-async def reply(twitter, status):
+async def reply(twitter, status, session):
     time.sleep(random.uniform(0,2))
 
     try:
@@ -112,12 +111,12 @@ async def reply(twitter, status):
 
     print("make API requests")
 
-    result = await get_response(text)
+    result = await get_response(text, session)
 
     print(result)
 
     while is_bad(result):
-        result = await get_response(text)
+        result = await get_response(text, session)
         print(result)
 
     try:
