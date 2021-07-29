@@ -48,8 +48,8 @@ def tweet_thread(thread_name):
     print(thread_name + " starting")
 
     while True:
-        text = get_gpt(finetune + "\n")
-        text = re.split("\n",text)[0].strip()[:280]
+        text = get_gpt(finetune + "\nJack:")
+        text = re.split(".*?:",text)[0].strip()[:280]
 
         try:
             twitter.update_status(text)

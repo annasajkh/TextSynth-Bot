@@ -28,7 +28,10 @@ def build_text(status):
     text = re.sub("@[^\s]+", "", text)
     text = re.sub("\n", " ", text).strip()
     
-    return f"\n{text}"
+    if status.user.name == "TextSynth":
+        return f"AI: {text}"
+    else:
+        return f"{status.user.name}: {text}"
 
 
 def get_text(status):
@@ -47,6 +50,8 @@ def get_gpt(text):
         "top_p": 0.9, 
         "seed": 0
     }
+
+    print(f"requesting text:\n{text}")
 
     headers = {
         "Content-Type": "application/json; charset=utf-8"
@@ -72,7 +77,7 @@ def get_gpt(text):
 
 def get_response(text):
     result = get_gpt(text)
-    result = re.split("\n",result)[0].strip()[:280]
+    result = re.split(".*?:",result)[0].strip()[:280]
     result = re.sub("\n", " ", result)
 
     return result
@@ -112,7 +117,7 @@ def reply(twitter, status):
     
     memory.reverse()
     
-    text = finetune + "\n".join(memory) + "\n"
+    text = finetune + "\n".join(memory) + "\nAI:"
 
     print("make API requests")
 
