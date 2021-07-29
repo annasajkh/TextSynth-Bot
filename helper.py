@@ -64,10 +64,12 @@ def get_gpt(text):
     for i in range(20):
         try:
             r = requests.post(url, data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), headers=headers)
+            
             try:
                 text = str(r.content, "utf-8")
             except:
                 text = str(r.content, "utf-8", errors="replace")
+            
             text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
             text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
 
