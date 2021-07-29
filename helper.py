@@ -127,7 +127,7 @@ def reply(twitter, status):
     
     memory.reverse()
     
-    text = finetune + "\n".join(memory) + "\nAI:"
+    text = finetune + "\n" + "\n".join(memory) + "\nAI:"
 
     print("make API requests")
 
