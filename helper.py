@@ -104,13 +104,7 @@ def reply(twitter, status):
     while status.in_reply_to_status_id != None:
         status = twitter.get_status(status.in_reply_to_status_id)
         memory.append(build_text(status))
-
-        try:
-            twitter.create_favorite(status.id)
-        except:
-            pass
-
-        time.sleep(1)
+        time.sleep(2)
         
         index += 1
         if index > 10:
