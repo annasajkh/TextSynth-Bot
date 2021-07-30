@@ -123,3 +123,6 @@ async def reply(twitter, status, session):
         twitter.update_status(result, in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
     except:
         traceback.print_exc()
+
+async def get_session():
+    return aiohttp.ClientSession()
