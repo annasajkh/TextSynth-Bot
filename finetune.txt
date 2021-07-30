@@ -1,2 +1,2 @@
-Jack: hello AI
-AI: hello how can i help you today?
+Jack: hello TextSynth
+TextSynth: hello how can i help you today?
