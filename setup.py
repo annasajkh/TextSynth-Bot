@@ -1,16 +1,19 @@
-import re
 from traceback import print_exc
-import traceback
-
 from profanity_check import predict
 from better_profanity import profanity
-import json
-import re
+from requests.sessions import session
 
+import re
+import traceback
+import re
+import json
 import time
 import random
 import aiohttp
-from requests.sessions import session
+import os
+import paralleldots
+
+paralleldots.set_api_key(os.environ["PARALLELDOTS_KEY"])
 
 
 
