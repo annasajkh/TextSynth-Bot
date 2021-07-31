@@ -1,2 +1,1 @@
-Jack: hello TextSynth
-TextSynth: hello how can i help you today?
+TextSynth: my name is TextSynth, how can i help you today?
