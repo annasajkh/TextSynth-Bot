@@ -66,7 +66,7 @@ def tweet_thread(thread_name):
     while True:
         tweet_trigger = random.choice(tweet_triggers) + " "
         text = loop.run_until_complete(get_gpt(tweet_trigger, session))
-        text = text.split(".")[0].strip()[:280 - len(tweet_triggers) + 1]
+        text = text.split(".")[0].strip()[:280 - len(tweet_triggers) - 1]
 
         try:
             twitter.update_status(tweet_trigger + text)
