@@ -56,7 +56,7 @@ def tweet_thread(thread_name):
     
     print(thread_name + " starting")
 
-    tweet_trigger = ["i love", "i hate" ,"you will", "you are", "you are not", "i should", "you should", "i'm a", "i don't like", "i like", "i feel like", "why is", "why should"]
+    tweet_triggers = ["i love", "i hate" ,"you will", "you are", "you are not", "i should", "you should", "i'm a", "i don't like", "i like", "i feel like", "why is", "why should"]
     
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
@@ -64,12 +64,12 @@ def tweet_thread(thread_name):
     
 
     while True:
-        tweet_trigger_choice = random.choice(tweet_trigger) 
-        text = loop.run_until_complete(get_gpt(tweet_trigger_choice, session))
+        tweet_trigger = random.choice(tweet_triggers) 
+        text = loop.run_until_complete(get_gpt(tweet_trigger, session))
         text = text.split(".")[0].strip()[:280]
 
         try:
-            twitter.update_status(tweet_trigger_choice + text)
+            twitter.update_status(tweet_trigger + text)
         except:
             traceback.print_exc()
             continue
