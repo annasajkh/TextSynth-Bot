@@ -10,6 +10,7 @@ from helper import *
 import _thread
 
 
+
 def reply_thread(thread_name):
     print(thread_name + " starting")
 
@@ -54,6 +55,8 @@ def reply_thread(thread_name):
 def tweet_thread(thread_name):
     
     print(thread_name + " starting")
+
+    tweet_trigger = ["i love", "i hate" ,"you will ", "i will ", "you must ", "you are ", "you are not ", "i should ", "you should ", "i'm a ", "i don't like ", "i like ", "i will ", "i feel like ", "why is ", "why ","why should ","how ", "how should ", "where", "when", "who"]
     
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
@@ -61,8 +64,8 @@ def tweet_thread(thread_name):
     
 
     while True:
-        text = loop.run_until_complete(get_gpt(finetune + "\nUser:", session))
-        text = re.split(".*?:",text)[0].strip()[:280]
+        text = loop.run_until_complete(get_gpt(random.choice(tweet_trigger), session))
+        text = text.split(".")[0].strip()[:280]
 
         try:
             twitter.update_status(text)
