@@ -67,13 +67,13 @@ async def get_response(text, session):
 
 
 def is_bad(text):
-    if predict([text])[0] > 0.5 or profanity.contains_profanity(text):
+    if predict([text])[0] > 0.9 or profanity.contains_profanity(text):
         return True
     
     try:
         result = paralleldots.abuse(text)
 
-        if result["abusive"] > 0.8:
+        if result["abusive"] > 0.9:
             return True
     except:
         return False
