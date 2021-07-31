@@ -56,7 +56,7 @@ def tweet_thread(thread_name):
     
     print(thread_name + " starting")
 
-    tweet_trigger = ["i love", "i hate" ,"you will ", "i will ", "you must ", "you are ", "you are not ", "i should ", "you should ", "i'm a ", "i don't like ", "i like ", "i will ", "i feel like ", "why is ", "why ","why should ","how ", "how should ", "where", "when", "who"]
+    tweet_trigger = ["i love", "i hate" ,"you will", "you are", "you are not", "i should", "you should", "i'm a", "i don't like", "i like", "i feel like", "why is", "why should"]
     
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
