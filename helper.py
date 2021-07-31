@@ -37,29 +37,22 @@ async def get_gpt(text, session):
 
     text = ""
 
-    for i in range(20):
-        try:
-            async with session.post(url, data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), headers=headers) as response:
-                
-                content = await response.content.read()
+    try:
+        async with session.post(url, data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), headers=headers) as response:
+            
+            content = await response.content.read()
 
-                try:
-                    text = str(content, "utf-8")
-                except:
-                    text = str(content, "utf-8", errors="replace")
-                
-                text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
-                text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
-
-                if len(text) < 10:
-                    print("text is too short sleeping for 10 seconds")
-                    time.sleep(10)
-                    continue
-
-            break
-        except Exception as e:
-            print_exc()
-            pass
+            try:
+                text = str(content, "utf-8")
+            except:
+                text = str(content, "utf-8", errors="replace")
+            
+            text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
+            text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
+            
+    except Exception as e:
+        print_exc()
+        pass
 
 
 
@@ -129,7 +122,8 @@ async def reply(twitter, status, session):
 
     try:
         twitter.update_status(result, in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
-    except:
+    except Exception as e:
+        twitter.update_status(str(e), in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
         traceback.print_exc()
 
 async def get_session():
