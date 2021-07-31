@@ -61,7 +61,7 @@ def tweet_thread(thread_name):
     
 
     while True:
-        text = loop.run_until_complete(get_gpt(finetune + "\nTextSynth:", session))
+        text = loop.run_until_complete(get_gpt(finetune + "\nUser:", session))
         text = re.split(".*?:",text)[0].strip()[:280]
 
         try:
