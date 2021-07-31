@@ -52,6 +52,7 @@ async def get_gpt(text, session):
                 text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
 
                 if len(text) < 10:
+                    print("text is too short sleeping for 10 seconds")
                     time.sleep(10)
                     continue
 
