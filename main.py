@@ -64,11 +64,12 @@ def tweet_thread(thread_name):
     
 
     while True:
-        text = loop.run_until_complete(get_gpt(random.choice(tweet_trigger), session))
+        tweet_trigger_choice = random.choice(tweet_trigger) 
+        text = loop.run_until_complete(get_gpt(tweet_trigger_choice, session))
         text = text.split(".")[0].strip()[:280]
 
         try:
-            twitter.update_status(text)
+            twitter.update_status(tweet_trigger_choice + text)
         except:
             traceback.print_exc()
             continue
