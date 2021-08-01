@@ -37,22 +37,25 @@ async def get_gpt(text, session):
 
     text = ""
 
-    try:
-        async with session.post(url, data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), headers=headers) as response:
-            
-            content = await response.content.read()
+    for i in range(10):
+        try:
+            async with session.post(url, data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), headers=headers) as response:
+                
+                content = await response.content.read()
 
-            try:
-                text = str(content, "utf-8")
-            except:
-                text = str(content, "utf-8", errors="replace")
-            
-            text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
-            text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
-            
-    except Exception as e:
-        print_exc()
-        pass
+                try:
+                    text = str(content, "utf-8")
+                except:
+                    text = str(content, "utf-8", errors="replace")
+                
+                text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
+                text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
+                
+                if text == "":
+                    continue
+        except Exception as e:
+            print_exc()
+            pass
 
 
 
@@ -116,7 +119,7 @@ async def reply(twitter, status, session):
 
     print(result)
 
-    while is_bad(result) or result == "":
+    while is_bad(result):
         result = await get_response(text, session)
         print(result)
 
