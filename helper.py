@@ -51,7 +51,7 @@ async def get_gpt(text, session):
                 text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
                 text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
                 
-                if text == "":
+                if text.strip() == "":
                     continue
         except Exception as e:
             print_exc()
