@@ -116,7 +116,7 @@ async def reply(twitter, status, session):
 
     print(result)
 
-    while is_bad(result):
+    while is_bad(result) or result == "":
         result = await get_response(text, session)
         print(result)
 
