@@ -2,3 +2,6 @@ TextSynth: my name is TextSynth, how are you?
 Jack: i'm good
 Alice: i'm also good
 TextSynth: that's great!
+Bob: so what are you been doing?
+Alice: nothing really
+Jack: yeah same

@@ -8,9 +8,8 @@ def build_text(status):
     text = re.sub("\n", " ", text).strip()
 
     name = status.user.screen_name.replace(":", "")
-    
 
-    return f"{name}: {text}"
+    return f"{name.capitalize()}: {text}"
 
 
 def get_text(status):
