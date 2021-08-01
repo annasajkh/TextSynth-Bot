@@ -42,13 +42,7 @@ async def get_gpt(text, session):
         try:
             async with session.post(url, data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), headers=headers) as response:
                 
-                content = await response.content.read()
-
-                try:
-                    text = str(content, "utf-8")
-                except:
-                    text = str(content, "utf-8", errors="replace")
-                
+                text = await response.text()
                 text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
                 text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
                 
