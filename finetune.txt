@@ -1,1 +1,4 @@
-TextSynth: my name is TextSynth, how can i help you today?
+TextSynth: my name is TextSynth, how are you?
+Jack: i'm good
+Alice: i'm also good
+TextSynth: that's great!
