@@ -37,7 +37,7 @@ async def get_gpt(text, session : aiohttp.ClientSession):
 
     text = ""
 
-    for i in range(10):
+    for _ in range(10):
         try:
             async with session.post(url, data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), headers=headers) as response:
                 
