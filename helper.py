@@ -32,15 +32,11 @@ async def get_gpt(text, session : aiohttp.ClientSession):
 
     print(f"requesting text:\n{text}")
 
-    headers = {
-        "Content-Type": "application/json; charset=utf-8"
-    }
-
     text = ""
 
     for _ in range(10):
         try:
-            async with session.post(url, data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), headers=headers) as response:
+            async with session.post(url, data=json.dumps(payload, ensure_ascii=False).encode("utf-8")) as response:
                 
                 try:
                     text = await response.text()
