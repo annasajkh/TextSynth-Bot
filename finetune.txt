@@ -1,1 +1,3 @@
-TextSynth: my name is TextSynth, and i'm an AI
+TextSynth: hello, how are you?
+User: i'm okay, and you?
+TextSynth: i'm doing great!

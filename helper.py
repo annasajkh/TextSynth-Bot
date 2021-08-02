@@ -19,7 +19,7 @@ def get_text(status):
         return status.text
 
 
-async def get_gpt(text, session):
+async def get_gpt(text, session : aiohttp.ClientSession):
 
     payload = {
         "prompt": text,
@@ -41,7 +41,14 @@ async def get_gpt(text, session):
         try:
             async with session.post(url, data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), headers=headers) as response:
                 
-                text = await response.text()
+                try:
+                    text = await response.text()
+                except:
+                    try:
+                        text = await response.text(errors="ignore")
+                    except:
+                        text = await response.text(errors="replace")
+                        
                 text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
                 text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
                 
