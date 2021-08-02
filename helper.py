@@ -5,6 +5,7 @@ from setup import *
 def build_text(status):
     text = get_text(status)
     text = re.sub("@[^\s]+", "", text)
+    text = re.sub(r'^https?:\/\/.*[\r\n]*', '', text, flags=re.MULTILINE)
     text = re.sub("\n", " ", text).strip()
 
     name = status.user.screen_name.replace(":", "").capitalize()
@@ -23,9 +24,9 @@ async def get_gpt(text, session : aiohttp.ClientSession):
 
     payload = {
         "prompt": text,
-        "temperature": 0.9,
-        "top_k": 20, 
-        "top_p": 0.9, 
+        "temperature": 1,
+        "top_k": 40, 
+        "top_p": 0.66, 
         "seed": 0
     }
 
