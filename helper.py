@@ -7,9 +7,9 @@ def build_text(status):
     text = re.sub("@[^\s]+", "", text)
     text = re.sub("\n", " ", text).strip()
 
-    name = status.user.screen_name.replace(":", "")
+    name = status.user.screen_name.replace(":", "").capitalize()
 
-    return f"{name.capitalize()}: {text}"
+    return f"{name}: {text}"
 
 
 def get_text(status):
