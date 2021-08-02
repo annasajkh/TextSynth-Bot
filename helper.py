@@ -45,15 +45,13 @@ async def get_gpt(text, session : aiohttp.ClientSession):
                 try:
                     text = await response.text()
                 except:
-                    try:
-                        text = await response.text(errors="ignore")
-                    except:
-                        text = await response.text(errors="replace")
+                    text = await response.text(errors="ignore")
                         
                 text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
                 text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
                 
                 if text.strip() == "":
+                    print("text empty!!!")
                     continue
         except Exception as e:
             print_exc()
