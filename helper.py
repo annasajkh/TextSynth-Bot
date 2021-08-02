@@ -26,7 +26,7 @@ async def get_gpt(text, session : aiohttp.ClientSession):
         "prompt": text,
         "temperature": 1,
         "top_k": 40, 
-        "top_p": 0.66, 
+        "top_p": 0.9, 
         "seed": 0
     }
 
