@@ -57,8 +57,8 @@ async def get_gpt(text, session : aiohttp.ClientSession):
 
     return text
 
-async def get_response(text, session):
-    result = await get_gpt(text, session)
+def get_response(text, session):
+    result = asyncio.get_event_loop().run_until_complete(get_gpt(text, session))
     result = re.split(".*?:",result)[0].strip()[:280]
     result = re.sub("\n", " ", result)
 
@@ -80,7 +80,7 @@ def is_bad(text):
     return False
 
 
-async def reply(twitter, status, session):
+def reply(twitter, status, session):
 
     try:
         twitter.create_favorite(status.id)
@@ -110,12 +110,12 @@ async def reply(twitter, status, session):
 
     print("make API requests")
 
-    result = await get_response(text, session)
+    result = get_response(text, session)
 
     print(result)
 
     while is_bad(result) or result.strip() == "":
-        result = await get_response(text, session)
+        result = get_response(text, session)
         print(result)
 
     try:

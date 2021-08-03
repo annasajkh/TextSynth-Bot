@@ -30,7 +30,7 @@ def reply_thread(thread_name):
             print("trying to reply to " + status.user.screen_name)
 
             try:
-                loop.run_until_complete(reply(twitter, status, session))
+                reply(twitter, status, session)
             except:
                 traceback.print_exc()
 
