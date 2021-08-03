@@ -30,7 +30,7 @@ def reply_thread(thread_name):
             print("trying to reply to " + status.user.screen_name)
 
             try:
-                reply(twitter, status, session)
+                reply(twitter, status, session, loop)
             except:
                 traceback.print_exc()
 
@@ -62,10 +62,10 @@ def tweet_thread(thread_name):
     
 
     while True:
-        result = get_response(finetune + "\nUser: ", session)
+        result = get_response(finetune + "\nUser: ", session, loop)
 
         while is_bad(result) or result.strip() == "":
-            result = get_response(finetune + "\nUser: ", session)
+            result = get_response(finetune + "\nUser: ", session, loop)
             print(result)
 
 
