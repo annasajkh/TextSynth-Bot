@@ -65,7 +65,7 @@ def tweet_thread(thread_name):
         result = get_response(finetune + "\nUser: ", session)
 
         while is_bad(result) or result.strip() == "":
-            result = loop.run_until_complete(get_response(finetune + "\nUser: ", session))
+            result = get_response(finetune + "\nUser: ", session)
             print(result)
 
 
