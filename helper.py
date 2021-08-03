@@ -29,8 +29,8 @@ async def get_gpt(text, session : aiohttp.ClientSession):
         "prompt": text,
         "temperature": 1,
         "top_k": 40, 
-        "top_p": 0.9, 
-        "seed": 0
+        "top_p": 0.77, 
+        "seed": random.randrange(0, 1000000000)
     }
 
     print(f"requesting text:\n{text}")
