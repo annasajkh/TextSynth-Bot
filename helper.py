@@ -10,7 +10,10 @@ def build_text(status):
 
     name = status.user.screen_name.replace(":", "").capitalize()
 
-    return f"{name}: {text}"
+    if name == "TextSynth":
+        return f"AI: {text}"
+    else:
+        return f"{name}: {text}"
 
 
 def get_text(status):
@@ -34,33 +37,23 @@ async def get_gpt(text, session : aiohttp.ClientSession):
 
     text = ""
 
-    for i in range(5):
-        print("attempt: " + i)
-        
-        try:
-            async with session.post(url, data=json.dumps(payload, ensure_ascii=False).encode("utf-8")) as response:
-                
+    try:
+        async with session.post(url, data=json.dumps(payload, ensure_ascii=False).encode("utf-8")) as response:
+            try:
+                text = await response.text()
+            except:
                 try:
-                    text = await response.text()
+                    text = await response.content.read()
+                    text = str(text,response.get_encoding(),errors="replace")
                 except:
-                    try:
-                        text = await response.content.read()
-                        text = str(text,response.get_encoding(),errors="replace")
-                    except:
-                        text = await response.content.read()
-                        text = str(text,"utf-8",errors="replace")
-                        
-                text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
-                text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
-                
-                if text.strip() == "":
-                    print("text empty!!!")
-                    continue
-        except Exception as e:
-            print_exc()
-            pass
-
-
+                    text = await response.content.read()
+                    text = str(text,"utf-8",errors="replace")
+                    
+            text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
+            text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
+    except Exception as e:
+        print_exc()
+        pass
 
     return text
 
@@ -113,7 +106,7 @@ async def reply(twitter, status, session):
     
     memory.reverse()
     
-    text = finetune + "\n" + "\n".join(memory) + "\nTextSynth:"
+    text = finetune + "\n" + "\n".join(memory) + "\nAI:"
 
     print("make API requests")
 
@@ -121,7 +114,7 @@ async def reply(twitter, status, session):
 
     print(result)
 
-    while is_bad(result):
+    while is_bad(result) or result.strip() == "":
         result = await get_response(text, session)
         print(result)
 
