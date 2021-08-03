@@ -5,7 +5,7 @@ from setup import *
 def build_text(status):
     text = get_text(status)
     text = re.sub("@[^\s]+", "", text)
-    text = re.sub(r'^https?:\/\/.*[\r\n]*', '', text, flags=re.MULTILINE)
+    text = re.sub("https://[^\s]+", "", text)
     text = re.sub("\n", " ", text).strip()
 
     name = status.user.screen_name.replace(":", "").capitalize()
