@@ -62,12 +62,12 @@ def tweet_thread(thread_name):
     
 
     while True:
-        result = loop.run_until_complete(get_gpt(finetune + "\nTextSynth: ", session))
+        result = loop.run_until_complete(get_gpt(finetune + "\nUser: ", session))
         result = re.split(".*?:",result)[0].strip()[:280]
         result = re.sub("\n", " ", result)
 
         while is_bad(result):
-            result = loop.run_until_complete(get_gpt(finetune + "\nTextSynth: ", session))
+            result = loop.run_until_complete(get_gpt(finetune + "\nUser: ", session))
             print(result)
 
 
