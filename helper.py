@@ -10,7 +10,7 @@ def build_text(status):
 
     name = status.user.screen_name.replace(":", "").capitalize()
 
-    if name == "TextSynth":
+    if status.user.screen_name == "TextSynth":
         return f"AI: {text}"
     else:
         return f"{name}: {text}"
