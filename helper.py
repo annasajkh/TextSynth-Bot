@@ -59,7 +59,7 @@ async def get_gpt(text, session : aiohttp.ClientSession):
 
 def get_response(text, session):
     result = asyncio.get_event_loop().run_until_complete(get_gpt(text, session))
-    result = re.split(".*?:",result)[0].strip()[:280]
+    result = re.split(".*:",result)[0].strip()[:280]
     result = re.sub("\n", " ", result)
 
     return result
