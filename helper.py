@@ -34,14 +34,19 @@ async def get_gpt(text, session : aiohttp.ClientSession):
 
     text = ""
 
-    for _ in range(10):
+    for _ in range(20):
         try:
             async with session.post(url, data=json.dumps(payload, ensure_ascii=False).encode("utf-8")) as response:
                 
                 try:
                     text = await response.text()
                 except:
-                    text = await response.text(errors="replace")
+                    try:
+                        text = await response.content.read()
+                        text = str(text,response.get_encoding(),errors="replace")
+                    except:
+                        text = await response.content.read()
+                        text = str(text,"utf-8",errors="replace")
                         
                 text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
                 text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
