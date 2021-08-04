@@ -27,9 +27,9 @@ async def get_gpt(text, session : aiohttp.ClientSession):
 
     payload = {
         "prompt": text,
-        "temperature": 1,
-        "top_k": 40, 
-        "top_p": 0.77, 
+        "temperature": 0.8,
+        "top_k": 20, 
+        "top_p": 0.8, 
         "seed": random.randrange(0, 1000000000)
     }
 
