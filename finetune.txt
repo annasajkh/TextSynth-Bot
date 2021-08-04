@@ -1,3 +1,1 @@
 AI: hello, how are you?
-User: i'm okay, and you?
-AI: i'm doing great!
