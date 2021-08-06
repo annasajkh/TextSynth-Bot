@@ -8,7 +8,7 @@ def build_text(status):
     text = re.sub("https://[^\s]+", "", text)
     text = re.sub("\n", " ", text).strip()
 
-    name = status.user.screen_name.replace(":", "").capitalize()
+    name = status.user.screen_name.replace(":", "")
 
     if status.user.screen_name == "TextSynth":
         return f"AI: {text}"
@@ -107,6 +107,7 @@ def reply(twitter, status, session, loop):
     memory.reverse()
     
     text = finetune + "\n" + "\n".join(memory) + "\nAI:"
+    text = text.replace("User", status.user.screen_name.replace(":", ""))
 
     print("make API requests")
 
