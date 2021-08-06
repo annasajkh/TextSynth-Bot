@@ -11,7 +11,7 @@ def build_text(status):
     name = status.user.screen_name.replace(":", "")
 
     if status.user.screen_name == "TextSynth":
-        return f"AI: {text}"
+        return f"Bot: {text}"
     else:
         return f"{name}: {text}"
 
@@ -106,7 +106,7 @@ def reply(twitter, status, session, loop):
     
     memory.reverse()
     
-    text = finetune + "\n" + "\n".join(memory) + "\nAI:"
+    text = finetune + "\n" + "\n".join(memory) + "\nBot:"
     text = text.replace("User", status.user.screen_name.replace(":", ""))
 
     print("make API requests")

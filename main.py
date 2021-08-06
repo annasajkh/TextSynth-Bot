@@ -62,10 +62,10 @@ def tweet_thread(thread_name):
     
 
     while True:
-        result = get_response(finetune + "\nAI: ", session, loop)
+        result = get_response(finetune + "\nBot: ", session, loop)
 
         while is_bad(result) or result.strip() == "":
-            result = get_response(finetune + "\nAI: ", session, loop)
+            result = get_response(finetune + "\nBot: ", session, loop)
             print(result)
 
 

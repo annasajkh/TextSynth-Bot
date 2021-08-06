@@ -1,2 +1,4 @@
-AI: hello, how are you?
-User: i'm fine
+Bot: hi, how are you?
+User: i'm fine, and you?
+Bot: i'm doing great
+User: that's awesome
