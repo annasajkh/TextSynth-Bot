@@ -22,3 +22,7 @@ url = "https://bellard.org/textsynth/api/v1/engines/gptj_6B/completions"
 f = open("finetune.txt", "r")
 finetune = f.read()
 f.close()
+
+f = open("finetune_tweet.txt", "r")
+finetune_tweet = f.read()
+f.close()
