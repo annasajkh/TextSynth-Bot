@@ -62,13 +62,9 @@ def tweet_thread(thread_name):
     
 
     while True:
+
         result = loop.run_until_complete(get_gpt(finetune_tweet, session))
-
-        while is_bad(result) or result.strip() == "":
-            result = loop.run_until_complete(get_gpt(finetune_tweet, session))
-            print(result)
-
-        result = result.split("\n")[0]
+        result = result.split("tweet:")[0].strip()
 
         try:
             twitter.update_status(result)
