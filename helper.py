@@ -82,6 +82,9 @@ def is_bad(text):
 
 def reply(twitter, status, session, loop):
 
+    if "rt" in get_text(status).lower():
+        return
+
     try:
         twitter.create_favorite(status.id)
     except:
@@ -100,7 +103,7 @@ def reply(twitter, status, session, loop):
             status = twitter.get_status(status.in_reply_to_status_id)
         except:
             break
-        
+
         memory.append(build_text(status))
         time.sleep(2)
         

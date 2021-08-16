@@ -31,7 +31,7 @@ def reply_thread(thread_name):
 
             if status.retweeted:
                 return
-
+                
             mentions = [user["screen_name"] for user in status.entities["user_mentions"]]
             print(mentions)
 
