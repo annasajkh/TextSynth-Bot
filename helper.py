@@ -96,7 +96,11 @@ def reply(twitter, status, session, loop):
     memory.append(build_text(status))
 
     while status.in_reply_to_status_id != None:
-        status = twitter.get_status(status.in_reply_to_status_id)
+        try:
+            status = twitter.get_status(status.in_reply_to_status_id)
+        except:
+            break
+        
         memory.append(build_text(status))
         time.sleep(2)
         
