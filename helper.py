@@ -120,9 +120,9 @@ def reply(twitter, status, session, loop):
         print(result)
 
     try:
-        twitter.update_status(result, in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
+        twitter.update_status(f"@{reply_status.user.screen_name} {result}", in_reply_to_status_id=reply_status.id)
     except Exception as e:
-        twitter.update_status(str(e), in_reply_to_status_id=reply_status.id, auto_populate_reply_metadata=True)
+        twitter.update_status(f"@{reply_status.user.screen_name} {str(e)}", in_reply_to_status_id=reply_status.id)
         traceback.print_exc()
 
 async def get_session():
