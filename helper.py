@@ -127,7 +127,11 @@ def reply(twitter, status, session, loop):
     for i in range(0, 5):
         if not (is_bad("\n".join(memory) + "\nBot:" + result) or result.strip() == ""):
             break
+
         result = get_response(text, session, loop)
+
+        if == 4:
+            return
 
     try:
         twitter.update_status(f"@{reply_status.user.screen_name} {result}", in_reply_to_status_id=reply_status.id)
