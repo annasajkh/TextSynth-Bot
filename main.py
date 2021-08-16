@@ -34,7 +34,7 @@ def reply_thread(thread_name):
             print(mentions)
 
             for user in ["DeepLeffen", "gpt2upaguy", "dril_gpt2"]:
-                if user in mentions:
+                if user in mentions and "TextSynth" not in mentions:
                     return
 
             if status.user.screen_name == "TextSynth":
