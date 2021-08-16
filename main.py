@@ -30,7 +30,7 @@ def reply_thread(thread_name):
             if status.retweeted:
                 return
 
-            mentions = [ user["screen_name"] for user in status.entities["user_mentions"]]
+            mentions = [user["screen_name"] for user in status.entities["user_mentions"]]
             print(mentions)
 
             for user in ["DeepLeffen", "gpt2upaguy", "dril_gpt2"]:
