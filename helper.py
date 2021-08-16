@@ -124,7 +124,9 @@ def reply(twitter, status, session, loop):
 
     print(result)
 
-    while is_bad("\n".join(memory) + "\nBot:" + result) or result.strip() == "":
+    for i in range(0, 5):
+        if not (is_bad("\n".join(memory) + "\nBot:" + result) or result.strip() == ""):
+            break
         result = get_response(text, session, loop)
 
     try:
