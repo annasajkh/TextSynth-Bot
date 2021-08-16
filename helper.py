@@ -66,14 +66,14 @@ def get_response(text, session, loop):
 
 
 def is_bad(text):
-    if predict([text])[0] > 0.9 or profanity.contains_profanity(text):
+    if predict([text])[0] == 1 or profanity.contains_profanity(text):
         print("profinaty check it's bad word")
         return True
     
     try:
         result = paralleldots.abuse(text)
 
-        if result["abusive"] > 0.9:
+        if result["abusive"] == 1:
             print("paralleldots thinks it's bad word")
             return True
     except:
@@ -124,9 +124,8 @@ def reply(twitter, status, session, loop):
 
     print(result)
 
-    while is_bad(result) or result.strip() == "":
+    while is_bad("\n".join(memory) + "\nBot:" + result) or result.strip() == "":
         result = get_response(text, session, loop)
-        print(result)
 
     try:
         twitter.update_status(f"@{reply_status.user.screen_name} {result}", in_reply_to_status_id=reply_status.id)
