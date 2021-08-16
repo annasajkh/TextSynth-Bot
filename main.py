@@ -47,7 +47,7 @@ def reply_thread(thread_name):
     while True:
         try:
             print("bot starting...")
-            stream.filter(track=["@TextSynth"], follow=["DeepLeffen", "gpt2upaguy", "dril_gpt2"])
+            stream.filter(follow=["TextSynth", "DeepLeffen", "gpt2upaguy", "dril_gpt2"])
         except Exception as e:
             traceback.print_exc()
             time.sleep(10)
