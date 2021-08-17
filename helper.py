@@ -63,12 +63,13 @@ def get_response(text, session, loop):
     result = re.sub("\n", " ", result)
 
     for i in range(0, 10):
+        if not is_bad(result) and result.strip() != "":
+            break
+        
         result = loop.run_until_complete(get_gpt(text, session))
         result = re.split(".*:",result)[0].strip()[:280]
         result = re.sub("\n", " ", result)
 
-        if not is_bad(result) and result.strip() != "":
-            break
 
         time.sleep(5)
 
