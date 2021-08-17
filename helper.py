@@ -131,7 +131,7 @@ def reply(twitter, status, session, loop):
 
     print("make API requests")
 
-    result = get_response("\n".join(memory) + "\nBot:" + result, session, loop)
+    result = get_response(text, session, loop)
 
     try:
         twitter.update_status(f"@{reply_status.user.screen_name} {result}", in_reply_to_status_id=reply_status.id)
