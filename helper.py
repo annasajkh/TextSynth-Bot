@@ -62,6 +62,16 @@ def get_response(text, session, loop):
     result = re.split(".*:",result)[0].strip()[:280]
     result = re.sub("\n", " ", result)
 
+    for i in range(0, 5):
+        result = loop.run_until_complete(get_gpt(text, session))
+        result = re.split(".*:",result)[0].strip()[:280]
+        result = re.sub("\n", " ", result)
+
+        if not is_bad(result) and result.strip() != "":
+            break
+
+
+
     return result
 
 
@@ -80,6 +90,7 @@ def is_bad(text):
         return False
     
     return False
+
 
 
 def reply(twitter, status, session, loop):
@@ -120,18 +131,7 @@ def reply(twitter, status, session, loop):
 
     print("make API requests")
 
-    result = get_response(text, session, loop)
-
-    print(result)
-
-    for i in range(0, 5):
-        if not (is_bad("\n".join(memory) + "\nBot:" + result) or result.strip() == ""):
-            break
-
-        result = get_response(text, session, loop)
-
-        if i == 4:
-            return
+    result = get_response("\n".join(memory) + "\nBot:" + result, session, loop)
 
     try:
         twitter.update_status(f"@{reply_status.user.screen_name} {result}", in_reply_to_status_id=reply_status.id)
