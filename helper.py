@@ -130,7 +130,7 @@ def reply(twitter, status, session, loop):
 
         result = get_response(text, session, loop)
 
-        if == 4:
+        if i == 4:
             return
 
     try:
