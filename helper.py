@@ -115,7 +115,7 @@ def reply(twitter, status, session, loop):
         try:
             for tweet in tweets_cache:
                 if tweet["status_id"] == status.in_reply_to_status_id:
-                    memory.append(tweets_cache["text"])
+                    memory.append(tweet["text"])
                     status.in_reply_to_status_id = tweet["in_reply_to_status_id"]
 
                     raise Exception("alternative for continue outer loop")
