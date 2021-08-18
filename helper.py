@@ -62,7 +62,7 @@ def get_response(text, session, loop):
     result = re.split(".*:",result)[0].strip()[:280]
     result = re.sub("\n", " ", result)
 
-    for i in range(0, 10):
+    for i in range(0, 20):
         if not is_bad(result) and result.strip() != "":
             break
         
@@ -70,8 +70,7 @@ def get_response(text, session, loop):
         result = re.split(".*:",result)[0].strip()[:280]
         result = re.sub("\n", " ", result)
 
-
-        time.sleep(5)
+        time.sleep(1)
 
 
 
