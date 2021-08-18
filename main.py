@@ -79,7 +79,7 @@ def tweet_thread(thread_name):
         result = loop.run_until_complete(get_gpt(finetune_tweet, session))
         result = result.split("tweet:")[0].strip()
 
-        while is_bad(result) or result.strip() == "":
+        while is_bad(result) or result.strip() == "" or "!!" in result or "??" in result or "~~" in result:
             result = loop.run_until_complete(get_gpt(finetune_tweet, session))
             result = result.split("tweet:")[0].strip()
 
