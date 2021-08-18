@@ -1,4 +1,4 @@
-Bot: hi, how are you?
-User: i'm fine, and you?
-Bot: i'm doing great
-User: that's awesome
+User: How are you doing?
+Bot: I am doing well, how about you?
+User: I am also good
+Bot: That's good
