@@ -93,6 +93,7 @@ def is_bad(text):
 
 
 def reply(twitter, status, session, loop):
+    global status
 
     if "rt" in get_text(status).lower():
         return
