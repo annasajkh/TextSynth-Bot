@@ -139,9 +139,10 @@ def reply(twitter, status, session, loop):
         index += 1
         if index > 10:
             break
-    
+
     memory.reverse()
-    
+    memory = memory[:5000]
+
     text = finetune + "\n" + "\n".join(memory) + "\nTextSynth:"
     text = text.replace("User", reply_status.user.screen_name.replace(":", ""))
 
@@ -150,10 +151,13 @@ def reply(twitter, status, session, loop):
     result = get_response(text, session, loop)
 
     try:
-        twitter.update_status(f"@{reply_status.user.screen_name} {result}", in_reply_to_status_id=reply_status.id)
+        updated_status = twitter.update_status(f"@{reply_status.user.screen_name} {result}", in_reply_to_status_id=reply_status.id)
+        statuses_cache.append(updated_status)
     except Exception as e:
-        twitter.update_status(f"@{reply_status.user.screen_name} {str(e)}", in_reply_to_status_id=reply_status.id)
+        updated_status = twitter.update_status(f"@{reply_status.user.screen_name} {str(e)}", in_reply_to_status_id=reply_status.id)
+        statuses_cache.append(updated_status)
         traceback.print_exc()
+
 
 async def get_session():
     return aiohttp.ClientSession()
