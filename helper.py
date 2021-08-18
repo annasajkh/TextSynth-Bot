@@ -113,12 +113,12 @@ def reply(twitter, status, session, loop):
     while status.in_reply_to_status_id != None:
 
         try:
-            for tweet in tweets_cache:
-                if tweet["status_id"] == status.in_reply_to_status_id:
-                    memory.append(tweet["text"])
-                    status.in_reply_to_status_id = tweet["in_reply_to_status_id"]
+            for status_cache in statuses_cache:
+                if status_cache.id == status.in_reply_to_status_id:
+                    memory.append(build_text(status_cache))
+                    status = status_cache
 
-                    print("using cache: " + {tweet["text"]})
+                    print("using cache\n " + {build_text(status_cache)})
                     raise Exception("alternative for continue outer loop")
         except:
             continue
@@ -131,13 +131,10 @@ def reply(twitter, status, session, loop):
         text = build_text(status)
         memory.append(text)
 
-        tweets_cache.append({"in_reply_to_status_id": status.in_reply_to_status_id, 
-                            "status_id": status.id, 
-                            "text": text
-                            })
+        statuses_cache.append(status)
 
-        if len(tweets_cache) > 100000:
-            tweets_cache.pop(0)
+        if len(statuses_cache) > 100000:
+            statuses_cache.pop(0)
 
         time.sleep(2)
 
