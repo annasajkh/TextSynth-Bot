@@ -129,10 +129,10 @@ def reply(twitter, status, session, loop):
             break
 
         text = build_text(status)
+        print(text)
         memory.append(text)
 
         statuses_cache.append(status)
-        print(statuses_cache)
 
         if len(statuses_cache) > 100000:
             statuses_cache.pop(0)
