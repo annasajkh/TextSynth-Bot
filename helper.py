@@ -93,7 +93,6 @@ def is_bad(text):
 
 
 def reply(twitter, status, session, loop):
-    global status
 
     if "rt" in get_text(status).lower():
         return
@@ -133,6 +132,7 @@ def reply(twitter, status, session, loop):
         memory.append(text)
 
         statuses_cache.append(status)
+        print(statuses_cache)
 
         if len(statuses_cache) > 100000:
             statuses_cache.pop(0)
