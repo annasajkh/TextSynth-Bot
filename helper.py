@@ -118,6 +118,7 @@ def reply(twitter, status, session, loop):
                     memory.append(tweet["text"])
                     status.in_reply_to_status_id = tweet["in_reply_to_status_id"]
 
+                    print(f"using cache: {tweet["text"]}")
                     raise Exception("alternative for continue outer loop")
         except:
             continue
