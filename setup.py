@@ -18,6 +18,8 @@ paralleldots.set_api_key(os.environ["PARALLELDOTS_KEY"])
 
 
 url = "https://bellard.org/textsynth/api/v1/engines/gptj_6B/completions"
+tweets_cache = []
+
 
 f = open("finetune.txt", "r")
 finetune = f.read()

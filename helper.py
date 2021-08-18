@@ -111,14 +111,33 @@ def reply(twitter, status, session, loop):
     memory.append(build_text(status))
 
     while status.in_reply_to_status_id != None:
+
+        try:
+            for tweet in tweets_cache:
+                if tweet["status_id"] == status.in_reply_to_status_id:
+                    text = tweets_cache[f"{text}"]
+                    memory.append(text)
+                    status.in_reply_to_status_id = tweet["in_reply_to_status_id"]
+                    
+                    raise Exception("alternative for continue outer loop")
+        except:
+            continue
+
         try:
             status = twitter.get_status(status.in_reply_to_status_id)
         except:
             break
 
-        memory.append(build_text(status))
+        text = build_text(status)
+        memory.append(text)
+
+        tweets_cache.append({"in_reply_to_status_id": status.in_reply_to_status_id, 
+                            "status_id": status.id, 
+                            "text": text
+                            })
+
         time.sleep(2)
-        
+
         index += 1
         if index > 10:
             break
