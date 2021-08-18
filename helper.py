@@ -119,7 +119,7 @@ def reply(twitter, status, session, loop):
                     status = status_cache
                     raise Exception("alternative for continue outer loop")
         except:
-            print("using cache\n " + {build_text(status)})
+            print("using cache\n " + build_text(status))
             continue
 
         try:
@@ -128,7 +128,6 @@ def reply(twitter, status, session, loop):
             break
 
         text = build_text(status)
-        print(text)
         memory.append(text)
 
         statuses_cache.append(status)
