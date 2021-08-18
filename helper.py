@@ -149,6 +149,7 @@ def reply(twitter, status, session, loop):
     print("make API requests")
 
     result = get_response(text, session, loop)
+    result = [0:280]
 
     try:
         updated_status = twitter.update_status(f"@{reply_status.user.screen_name} {result}", in_reply_to_status_id=reply_status.id)
