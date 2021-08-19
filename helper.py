@@ -55,7 +55,7 @@ async def get_gpt(text, temperature, top_k, top_p, session : aiohttp.ClientSessi
     return text
 
 def get_response(text, session, loop):
-    result = loop.run_until_complete(get_gpt(text, 0.9, 25, 0.9, session))
+    result = loop.run_until_complete(get_gpt(text, 0.9, 30, 0.9, session))
     result = re.split(".*:",result)[0].strip()[:280]
     result = re.sub("\n", " ", result)
 
@@ -63,7 +63,7 @@ def get_response(text, session, loop):
         if not is_bad(result) and result.strip() != "":
             break
         
-        result = loop.run_until_complete(get_gpt(text, 0.9, 25, 0.9, session))
+        result = loop.run_until_complete(get_gpt(text, 0.9, 30, 0.9, session))
         result = re.split(".*:",result)[0].strip()[:280]
         result = re.sub("\n", " ", result)
 
