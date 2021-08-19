@@ -19,24 +19,12 @@ def reply_thread(thread_name):
 
     session = loop.run_until_complete(get_session())
 
-    deepleffen = twitter.get_user("DeepLeffen").id_str
-    gpt2upaguy = twitter.get_user("gpt2upaguy").id_str
-    dril_gpt2  = twitter.get_user("dril_gpt2").id_str
-    dril_botposter = twitter.get_user("dril_botposter").id_str
-
 
     class Listener(tweepy.StreamListener):
         def on_status(self, status):
 
             if hasattr(status, "retweeted_status"):
                 return
-                
-            mentions = [user["screen_name"] for user in status.entities["user_mentions"]]
-            print(mentions)
-
-            for user in ["DeepLeffen", "gpt2upaguy", "dril_gpt2", "dril_botposter"]:
-                if user in mentions and "TextSynth" not in mentions:
-                    return
 
             if status.user.screen_name == "TextSynth":
                 return
@@ -61,10 +49,11 @@ def reply_thread(thread_name):
     while True:
         try:
             print("bot starting...")
-            stream.filter(track=["@TextSynth"], follow=[deepleffen, gpt2upaguy, dril_gpt2, dril_botposter])
+            stream.filter(track=["@TextSynth"])
         except Exception as e:
             traceback.print_exc()
             time.sleep(10)
+
 
 def tweet_thread(thread_name):
     print(thread_name + " starting")
