@@ -61,7 +61,7 @@ def reply_thread(thread_name):
     while True:
         try:
             print("bot starting...")
-            stream.filter(track=["@TextSynth"], follow=[deepleffen, gpt2upaguy, dril_gpt2, drilbot_neo, dril_botposter])
+            stream.filter(track=["@TextSynth"], follow=[deepleffen, gpt2upaguy, dril_gpt2, dril_botposter])
         except Exception as e:
             traceback.print_exc()
             time.sleep(10)
@@ -78,7 +78,7 @@ def tweet_thread(thread_name):
         result = loop.run_until_complete(get_gpt(finetune_tweet, 1, 50, 1, session))
         result = result.split("tweet:")[0].strip()
 
-        while is_bad(result) or result.strip() == "" or "!!" in result or "??" in result or "~~" in result:
+        while is_bad(result) or result.strip() == "" or "!!" in result or "??" in result or "~~" in result or "_" in result:
             result = loop.run_until_complete(get_gpt(finetune_tweet, 1, 50, 1,  session))
             result = result.split("tweet:")[0].strip()
 
