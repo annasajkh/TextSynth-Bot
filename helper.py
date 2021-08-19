@@ -140,8 +140,6 @@ def reply(twitter, status, session, loop):
         if index > 10:
             break
 
-    time.sleep(10)
-
     memory.reverse()
     memory = memory[:1000]
 
