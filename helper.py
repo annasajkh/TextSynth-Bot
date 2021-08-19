@@ -94,9 +94,6 @@ def is_bad(text):
 
 def reply(twitter, status, session, loop):
 
-    if "rt" in get_text(status).lower():
-        return
-
     try:
         twitter.create_favorite(status.id)
     except:

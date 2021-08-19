@@ -28,7 +28,7 @@ def reply_thread(thread_name):
     class Listener(tweepy.StreamListener):
         def on_status(self, status):
 
-            if status.retweeted:
+            if hasattr(status, "retweeted_status"):
                 return
                 
             mentions = [user["screen_name"] for user in status.entities["user_mentions"]]
