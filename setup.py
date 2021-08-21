@@ -16,7 +16,6 @@ import paralleldots
 paralleldots.set_api_key(os.environ["PARALLELDOTS_KEY"])
 
 
-
 url = "https://bellard.org/textsynth/api/v1/engines/gptj_6B/completions"
 statuses_cache = []
 
