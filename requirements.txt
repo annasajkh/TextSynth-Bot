@@ -6,17 +6,13 @@ better-profanity==0.7.0
 certifi==2021.5.30
 chardet==4.0.0
 charset-normalizer==2.0.3
-click==8.0.1
-Flask==2.0.1
 idna==3.2
-itsdangerous==2.0.1
-Jinja2==3.0.1
 joblib==1.0.1
-MarkupSafe==2.0.1
 multidict==5.1.0
 numpy==1.21.1
 oauthlib==3.1.1
 ParallelDots==3.2.14
+pip-autoremove==0.9.1
 PySocks==1.7.1
 python-dotenv==0.18.0
 requests==2.26.0
@@ -28,6 +24,4 @@ threadpoolctl==2.2.0
 tweepy==3.10.0
 typing-extensions==3.10.0.0
 urllib3==1.26.6
-waitress==2.0.0
-Werkzeug==2.0.1
 yarl==1.6.3

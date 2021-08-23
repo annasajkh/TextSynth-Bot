@@ -8,12 +8,6 @@ import traceback
 from twitter_api import *
 from helper import *
 import _thread
-from threading import Thread
-
-from flask import Flask
-
-app = Flask(__name__)
-
 
 
 def reply_thread(thread_name):
@@ -86,21 +80,6 @@ def tweet_thread(thread_name):
 
         time.sleep(60 * 60)
 
-
-@app.route('/')
-def main():
-  return "your bot is alive"
-
-
-def run():
-  from waitress import serve
-  serve(app, host="0.0.0.0", port=8080)
-
-def keep_alive():
-    server = Thread(target=run)
-    server.start()
-
-keep_alive()
 
 _thread.start_new_thread(reply_thread, ("reply thread",))
 _thread.start_new_thread(tweet_thread, ("tweet thread",))

@@ -30,7 +30,10 @@ async def get_gpt(text, temperature, top_k, top_p, session : aiohttp.ClientSessi
         "seed": random.randrange(0, 10000)
     }
 
-    print(f"requesting text:\n{text}")
+    if len(text) < 200:
+        print(f"requesting text:\n{text}")
+    else:
+        print("requesting text...")
 
     text = ""
 
