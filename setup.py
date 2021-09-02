@@ -1,5 +1,4 @@
 from traceback import print_exc
-from profanity_check import predict
 from better_profanity import profanity
 from requests.sessions import session
 
