@@ -1,6 +1,6 @@
 # TextSynth-Bot
 
-source code for twitter bot @TextSynth
+source code for twitter bot https://twitter.com/TextSynth
 
 using https://bellard.org/textsynth/
 
