@@ -1,5 +1,6 @@
 import asyncio
 from dotenv import load_dotenv
+
 load_dotenv()
 
 import time
@@ -10,10 +11,10 @@ from helper import *
 import _thread
 from threading import Thread
 
+import requests
 from flask import Flask
 
 app = Flask(__name__)
-
 
 
 def reply_thread(thread_name):
@@ -23,7 +24,6 @@ def reply_thread(thread_name):
     asyncio.set_event_loop(loop)
 
     session = loop.run_until_complete(get_session())
-
 
     class Listener(tweepy.StreamListener):
         def on_status(self, status):
@@ -46,7 +46,7 @@ def reply_thread(thread_name):
                 print("ahhhh")
                 time.sleep(20)
                 return False
-            
+
             print(status_code)
 
     stream = tweepy.Stream(auth, Listener())
@@ -66,44 +66,48 @@ def tweet_thread(thread_name):
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     session = loop.run_until_complete(get_session())
-    
 
     while True:
-        result = loop.run_until_complete(get_gpt(finetune_tweet, 1, 20, 1, session))
-        result = result.split("\n")[0].strip()
-
-        while result.strip() == "" or "!!" in result or "??" in result or "~~" in result or "_" in result or "**" in result:
-            result = loop.run_until_complete(get_gpt(finetune_tweet, 1, 20, 1,  session))
+        try:
+            result = loop.run_until_complete(get_gpt(finetune_tweet, 1, 20, 1, session))
             result = result.split("\n")[0].strip()
 
-            time.sleep(10)
+            while result.strip() == "" or "!!" in result or "??" in result or "~~" in result or "_" in result or "**" in result:
+                result = loop.run_until_complete(get_gpt(finetune_tweet, 1, 20, 1, session))
+                result = result.split("\n")[0].strip()
 
-        try:
-            twitter.update_status(result)
+                time.sleep(10)
+
+            try:
+                twitter.update_status(result)
+            except:
+                traceback.print_exc()
+                continue
+
+            time.sleep(60 * 60)
         except:
-            traceback.print_exc()
-            continue
-
-        time.sleep(60 * 60)
+            pass
 
 
 @app.route('/')
 def main():
-  return "your bot is alive"
+    return "your bot is alive"
 
 
 def run():
-  from waitress import serve
-  serve(app, host="0.0.0.0", port=8080)
+    from waitress import serve
+    serve(app, host="0.0.0.0", port=8080)
+
 
 def keep_alive():
     server = Thread(target=run)
     server.start()
 
+
 keep_alive()
 
-_thread.start_new_thread(reply_thread, ("reply thread",))
-_thread.start_new_thread(tweet_thread, ("tweet thread",))
+_thread.start_new_thread(reply_thread, ("reply thread", ))
+_thread.start_new_thread(tweet_thread, ("tweet thread", ))
 
 while 1:
     pass
