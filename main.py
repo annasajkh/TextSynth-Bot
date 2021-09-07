@@ -69,11 +69,11 @@ def tweet_thread(thread_name):
 
     while True:
         try:
-            result = loop.run_until_complete(get_gpt(finetune_tweet, 1, 20, 1, session))
+            result = loop.run_until_complete(get_gpt(finetune_tweet, 1, 40, 1, session))
             result = result.split("\n")[0].strip()
 
             while result.strip() == "" or "!!" in result or "??" in result or "~~" in result or "_" in result or "**" in result:
-                result = loop.run_until_complete(get_gpt(finetune_tweet, 1, 20, 1, session))
+                result = loop.run_until_complete(get_gpt(finetune_tweet, 1, 40, 1, session))
                 result = result.split("\n")[0].strip()
 
                 time.sleep(10)

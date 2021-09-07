@@ -58,7 +58,7 @@ async def get_gpt(text, temperature, top_k, top_p, session : aiohttp.ClientSessi
     return text
 
 def get_response(text, session, loop):
-    result = loop.run_until_complete(get_gpt(text, 1.0, 40, 0.9, session))
+    result = loop.run_until_complete(get_gpt(text, 1, 15, 1, session))
     result = re.split(".*:",result)[0].strip()[:280]
     result = re.sub("\n", " ", result)
 
@@ -66,7 +66,7 @@ def get_response(text, session, loop):
         if not is_bad(result) and result.strip() != "":
             break
         
-        result = loop.run_until_complete(get_gpt(text, 0.9, 20, 0.9, session))
+        result = loop.run_until_complete(get_gpt(text, 1, 15, 1, session))
         result = re.split(".*:",result)[0].strip()[:280]
         result = re.sub("\n", " ", result)
 
@@ -85,7 +85,7 @@ def is_bad(text):
     try:
         result = paralleldots.abuse(text)
 
-        if result["abusive"] == 1:
+        if result["abusive"] > 0.8:
             print("paralleldots thinks it's bad word")
             return True
     except:
@@ -131,7 +131,7 @@ def reply(twitter, status, session, loop):
 
         statuses_cache.append(status)
 
-        if len(statuses_cache) > 100000:
+        if len(statuses_cache) > 1000:
             statuses_cache.pop(0)
 
         time.sleep(2)
