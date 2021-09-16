@@ -76,10 +76,10 @@ def get_response(text, session, loop):
     return result
 
 
-def is_bad(text, paralleldots_key, profanity=True):
+def is_bad(text, paralleldots_key, is_profanity=True):
     paralleldots.set_api_key(paralleldots_key)
 
-    if profanity:
+    if is_profanity:
       if profanity.contains_profanity(text):
           print("profinaty check it's bad word")
           return True
