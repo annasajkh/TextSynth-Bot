@@ -63,7 +63,7 @@ def get_response(text, session, loop):
     result = re.sub("\n", " ", result)
 
     for i in range(0, 20):
-        if not is_bad(result) and result.strip() != "":
+        if not is_bad(result, os.environ["PARALLELDOTS_KEY"]) and result.strip() != "":
             break
         
         result = loop.run_until_complete(get_gpt(text, 1, 15, 1, session))
@@ -77,10 +77,13 @@ def get_response(text, session, loop):
     return result
 
 
-def is_bad(text):
-    if  profanity.contains_profanity(text):
-        print("profinaty check it's bad word")
-        return True
+def is_bad(text, paralleldots_key, profanity=True):
+    paralleldots.set_api_key(paralleldots_key)
+
+    if profanity:
+      if profanity.contains_profanity(text):
+          print("profinaty check it's bad word")
+          return True
     
     try:
         result = paralleldots.abuse(text)

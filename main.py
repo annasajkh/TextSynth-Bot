@@ -59,34 +59,65 @@ def reply_thread(thread_name):
             traceback.print_exc()
             time.sleep(10)
 
+def get_tweet():
+    finetune = """
+    if anyone feels like getting a snack after this shit post please do#
+    i've lost faith in my own opinions#
+    wtf? i just farted#
+    the rain is pretty but i don't wanna go outside and be wet#
+    yumyum i want to make baby with you#
+    i was doing dishes when i accidentally dropped the bowl, hard!#
+    """.strip()
+
+    params = {
+        "prompt": finetune,
+        "numResults": 1,
+        "maxTokens": 100,
+        "stopSequences": ["#"],
+        "topKReturn": 0,
+        "temperature": 1.0
+    }
+
+    response = requests.post(
+        "https://api.ai21.com/studio/v1/j1-jumbo/complete",
+        headers={"Authorization": f"Bearer {os.environ['key']}"},
+        json=params)
+
+    return response.json()["completions"][0]["data"]["text"]
 
 def tweet_thread(thread_name):
     print(thread_name + " starting")
 
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    session = loop.run_until_complete(get_session())
+    # loop = asyncio.new_event_loop()
+    # asyncio.set_event_loop(loop)
+    # session = loop.run_until_complete(get_session())
 
     while True:
         try:
-            result = loop.run_until_complete(get_gpt(finetune_tweet, 1, 40, 1, session))
-            result = result.split("\n")[0].strip()
+            # result = loop.run_until_complete(get_gpt(finetune_tweet, 1, 40, 1, session))
+            # result = result.split("\n")[0].strip()
 
-            while result.strip() == "" or "!!" in result or "??" in result or "~~" in result or "_" in result or "**" in result:
-                result = loop.run_until_complete(get_gpt(finetune_tweet, 1, 40, 1, session))
-                result = result.split("\n")[0].strip()
+            # while result.strip() == "" or "!!" in result or "??" in result or "~~" in result or "_" in result or "**" in result:
+            #     result = loop.run_until_complete(get_gpt(finetune_tweet, 1, 40, 1, session))
+            #     result = result.split("\n")[0].strip()
 
-                time.sleep(10)
+            #     time.sleep(10)
+            result = get_tweet()
 
-            try:
-                twitter.update_status(result)
-            except:
-                traceback.print_exc()
-                continue
+            for i in range(3):
+                if not is_bad(result, os.environ["PARALLELDOTS_KEY1"], False):
+                    try:
+                        twitter.update_status(result)
+                    except:
+                        traceback.print_exc()
+                    break
+                
+                result = get_tweet()
 
             time.sleep(60 * 60)
-        except:
-            pass
+        except Exception as e:
+            print(e)
+            time.sleep(60 * 60)
 
 
 @app.route('/')
