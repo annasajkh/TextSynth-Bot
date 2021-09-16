@@ -1,6 +1,6 @@
 import asyncio
 from setup import *
-
+import requests
 
 def build_text(status):
     text = get_text(status)
@@ -21,7 +21,6 @@ def get_text(status):
 
 
 async def get_gpt(text, temperature, top_k, top_p, session : aiohttp.ClientSession):
-
     payload = {
         "prompt": text,
         "temperature": temperature,
@@ -165,3 +164,20 @@ def reply(twitter, status, session, loop):
 
 async def get_session():
     return aiohttp.ClientSession()
+
+def get_tweet():
+    params = {
+        "prompt": finetune,
+        "numResults": 1,
+        "maxTokens": 100,
+        "stopSequences": ["#"],
+        "topKReturn": 0,
+        "temperature": 1.0
+    }
+
+    response = requests.post(
+        "https://api.ai21.com/studio/v1/j1-jumbo/complete",
+        headers={"Authorization": f"Bearer {os.environ['key']}"},
+        json=params)
+
+    return response.json()["completions"][0]["data"]["text"]
