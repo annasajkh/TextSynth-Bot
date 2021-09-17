@@ -167,7 +167,7 @@ async def get_session():
 
 def get_tweet():
     params = {
-        "prompt": finetune,
+        "prompt": finetune_tweet_ai21,
         "numResults": 1,
         "maxTokens": 100,
         "stopSequences": ["#"],

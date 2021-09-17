@@ -27,7 +27,7 @@ f = open("finetune_tweet.txt", "r")
 finetune_tweet = f.read()
 f.close()
 
-finetune = """
+finetune_tweet_ai21 = """
 if anyone feels like getting a snack after this shit post please do#
 i've lost faith in my own opinions#
 wtf? i just farted#

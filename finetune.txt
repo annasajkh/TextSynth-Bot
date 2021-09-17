@@ -1,4 +1,2 @@
 User: How are you doing?
-TextSynth: I am doing well, how about you?
-User: I am also good
-TextSynth: That's good
+TextSynth: I am doing well
