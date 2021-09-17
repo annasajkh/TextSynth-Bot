@@ -79,7 +79,7 @@ def tweet_thread(thread_name):
             for i in range(3):
                 if not is_bad(result, os.environ["PARALLELDOTS_KEY1"], False):
                     try:
-                        twitter.update_status(result)
+                        twitter.update_status(result.replace("#", ""))
                     except:
                         traceback.print_exc()
                     break
