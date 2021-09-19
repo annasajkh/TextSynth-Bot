@@ -98,7 +98,7 @@ def is_bad(text, paralleldots_key, is_profanity=True):
 
 
 def reply(twitter, status, session, loop):
-    time.sleep(random.random() * 5)
+    time.sleep(2 + random.random() * 3)
     try:
         twitter.create_favorite(status.id)
     except:
