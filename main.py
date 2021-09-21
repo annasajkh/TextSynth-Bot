@@ -74,10 +74,12 @@ def tweet_thread(thread_name):
             #     result = result.split("\n")[0].strip()
 
             #     time.sleep(10)
+
+            
             result = get_tweet()
 
             for i in range(3):
-                if not is_bad(result, os.environ["PARALLELDOTS_KEY1"], False):
+                if not is_bad(result):
                     try:
                         twitter.update_status(result)
                     except:

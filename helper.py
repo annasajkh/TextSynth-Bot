@@ -1,6 +1,7 @@
 import asyncio
 from setup import *
 import requests
+from alt_profanity_check import predict_prob
 
 def build_text(status):
     text = get_text(status)
@@ -53,7 +54,7 @@ async def get_gpt(text, temperature, top_k, top_p, session : aiohttp.ClientSessi
     except Exception as e:
         print_exc()
         pass
-
+    
     return text
 
 def get_response(text, session, loop):
@@ -62,7 +63,9 @@ def get_response(text, session, loop):
     result = re.sub("\n", " ", result)
 
     for i in range(0, 20):
-        if not is_bad(result, os.environ["PARALLELDOTS_KEY"]) and result.strip() != "" and len(result) <= 280:
+        print("checkking if there is something bad...")      
+
+        if not is_bad(result) and result.strip() != "" and len(result) <= 280:
             break
         
         result = loop.run_until_complete(get_gpt(text, 1, 15, 1, session))
@@ -70,28 +73,18 @@ def get_response(text, session, loop):
         result = re.sub("\n", " ", result)
 
         time.sleep(2)
-
-
-
+      
     return result
 
 
-def is_bad(text, paralleldots_key, is_profanity=True):
-    paralleldots.set_api_key(paralleldots_key)
-
-    if is_profanity:
-      if profanity.contains_profanity(text):
-          print("profinaty check it's bad word")
-          return True
+def is_bad(text):
+    if predict_prob([text])[0] > 0.9:
+        print("bad word")
+        return True
     
-    try:
-        result = paralleldots.abuse(text)
-
-        if result["abusive"] > 0.8:
-            print("paralleldots thinks it's bad word")
-            return True
-    except:
-        return False
+    if True in [bad in text for bad in ["die", "kill", "burn body", "burn you"]]:
+        print("kill word")
+        return True
     
     return False
 
@@ -152,6 +145,8 @@ def reply(twitter, status, session, loop):
 
     result = get_response(text, session, loop)
     result = result[0:280]
+
+    print("posting result...")
 
     try:
         updated_status = twitter.update_status(f"@{reply_status.user.screen_name} {result}", in_reply_to_status_id=reply_status.id)

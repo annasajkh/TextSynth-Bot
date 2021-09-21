@@ -1,5 +1,4 @@
 from traceback import print_exc
-from better_profanity import profanity
 from requests.sessions import session
 
 import re
@@ -10,10 +9,8 @@ import time
 import random
 import aiohttp
 import os
-import paralleldots
 
-paralleldots.set_api_key(os.environ["PARALLELDOTS_KEY"])
-
+os.system("pip3 install scikit-learn==0.24.0")
 
 url = "https://bellard.org/textsynth/api/v1/engines/gptj_6B/completions"
 statuses_cache = []
