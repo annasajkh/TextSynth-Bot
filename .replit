@@ -2,4 +2,4 @@ language = "python3"
 run = "python main.py"
 
 [packager]
-ignoredPackages=["profanity-check"]
+ignoredPackages=["profanity-check", "scikit-learn"]
