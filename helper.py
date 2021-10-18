@@ -65,7 +65,7 @@ def get_response(text, session, loop):
     for i in range(0, 20):
         print("checkking if there is something bad...")      
 
-        if not is_bad(result) and result.strip() != "" and len(result) <= 280:
+        if not is_bad(result) and result.strip() != "" and len(result) < 280:
             break
         
         result = loop.run_until_complete(get_gpt(text, 0.85, 40, 0.9, session))

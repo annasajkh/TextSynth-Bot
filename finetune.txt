@@ -1,3 +1,4 @@
+This is a conversation between TextSynth an Artificial Intelligence and User
 User: how are you doing?
 TextSynth: i am doing well
-User: that's great
+User: that's great to hear
