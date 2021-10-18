@@ -57,7 +57,7 @@ async def get_gpt(text, temperature, top_k, top_p, session : aiohttp.ClientSessi
     
     return text
 
-def get_response(text, session, loop):
+def get_response(text, memory, session, loop):
     result = loop.run_until_complete(get_gpt(text, 0.85, 40, 0.9, session))
     result = re.split(".*:",result)[0].strip()[:280]
     result = re.sub("\n", " ", result)
@@ -65,7 +65,7 @@ def get_response(text, session, loop):
     for i in range(0, 20):
         print("checkking if there is something bad...")      
 
-        if not is_bad(result) and result.strip() != "" and len(result) < 280:
+        if not is_bad(result) and result.strip() != "" and len(result) < 280 and result not in memory:
             break
         
         result = loop.run_until_complete(get_gpt(text, 0.85, 40, 0.9, session))
@@ -143,7 +143,7 @@ def reply(twitter, status, session, loop):
 
     print("make API requests")
 
-    result = get_response(text, session, loop)
+    result = get_response(text, memory, session, loop)
     result = result[0:280]
 
     print("posting result...")
