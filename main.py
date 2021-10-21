@@ -5,6 +5,7 @@ load_dotenv()
 
 import time
 import traceback
+import requests
 
 from twitter_api import *
 from helper import *
@@ -93,6 +94,12 @@ def tweet_thread(thread_name):
             print(e)
             time.sleep(60 * 60)
 
+def ping_thread(thread_name):
+    print(thread_name + " starting")
+    
+    while True:
+        requests.get("https://TextSynth-Bot.annasvirtual.repl.co")
+        time.sleep(3)
 
 @app.route('/')
 def main():
@@ -113,6 +120,7 @@ keep_alive()
 
 _thread.start_new_thread(reply_thread, ("reply thread", ))
 _thread.start_new_thread(tweet_thread, ("tweet thread", ))
+_thread.start_new_thread(ping_thread, ("ping thread", ))
 
 while 1:
     pass
