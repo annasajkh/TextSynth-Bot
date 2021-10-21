@@ -139,7 +139,6 @@ def reply(twitter, status, session, loop):
     memory = memory[:1000]
 
     text = finetune + "\n" + "\n".join(memory) + "\nTextSynth:"
-    text = text.replace("User", reply_status.user.screen_name.replace(":", ""))
 
     print("make API requests")
 

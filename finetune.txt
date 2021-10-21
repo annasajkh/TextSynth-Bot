@@ -1,3 +1,1 @@
-User: how are you doing?
-TextSynth: i am doing well
-User: that's great to hear
+this is a conversation
