@@ -149,12 +149,12 @@ def reply(twitter, status, session, loop):
     print("posting result...")
     
     for i in range(20):
-      try:
-          updated_status = twitter.update_status(f"@{reply_status.user.screen_name} {result}", in_reply_to_status_id=reply_status.id)
-          statuses_cache.append(updated_status)
-          break
-      except:
-          time.sleep(5)
+        try:
+            updated_status = twitter.update_status(f"@{reply_status.user.screen_name} {result}", in_reply_to_status_id=reply_status.id)
+            statuses_cache.append(updated_status)
+            break
+        except:
+            time.sleep(5)
 
 
 async def get_session():
