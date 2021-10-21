@@ -147,14 +147,14 @@ def reply(twitter, status, session, loop):
     result = result[0:280]
 
     print("posting result...")
-
-    try:
-        updated_status = twitter.update_status(f"@{reply_status.user.screen_name} {result}", in_reply_to_status_id=reply_status.id)
-        statuses_cache.append(updated_status)
-    except Exception as e:
-        updated_status = twitter.update_status(f"@{reply_status.user.screen_name} {str(e)}", in_reply_to_status_id=reply_status.id)
-        statuses_cache.append(updated_status)
-        traceback.print_exc()
+    
+    for i in range(20):
+      try:
+          updated_status = twitter.update_status(f"@{reply_status.user.screen_name} {result}", in_reply_to_status_id=reply_status.id)
+          statuses_cache.append(updated_status)
+          break
+      except:
+          time.sleep(5)
 
 
 async def get_session():
