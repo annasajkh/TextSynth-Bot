@@ -1,4 +1,4 @@
-User: How are you doing?
-TextSynth: I am doing well, how about you?
-User: I am also good
-TextSynth: That's good
+User: hi
+TextSynth: hello! how are you today?
+User: i am good thank you. how are you.
+TextSynth: great, thanks!

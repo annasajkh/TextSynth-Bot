@@ -27,7 +27,7 @@ async def get_gpt(text, temperature, top_k, top_p, session : aiohttp.ClientSessi
         "temperature": temperature,
         "top_k": top_k, 
         "top_p": top_p, 
-        "seed": random.randrange(0, 10000)
+        "seed": 0
     }
 
     if len(text) < 200:
@@ -139,7 +139,7 @@ def reply(twitter, status, session, loop):
     memory = memory[:1000]
 
     text = finetune + "\n" + "\n".join(memory) + "\nTextSynth:"
-    replace("User", reply_status.user.screen_name)
+    text = text.replace("User", reply_status.user.screen_name)
 
     print("make API requests")
 
