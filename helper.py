@@ -207,4 +207,4 @@ def get_tweet():
         headers={"Authorization": f"Bearer {os.environ['key']}"},
         json=params)
 
-    return response.json()["completions"][0]["data"]["text"]
+    return response.json()["completions"][0]["data"]["text"].replace("tweet: ", "")
