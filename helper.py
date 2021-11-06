@@ -11,6 +11,9 @@ def build_text(status):
 
     name = status.user.screen_name.replace(":", "")
 
+    if name == "TextSynth":
+        name = "AI"
+
     return f"{name}: {text}"
 
 
@@ -31,10 +34,10 @@ def get_gpt(text):#, temperature, top_k, top_p, session : aiohttp.ClientSession)
     #     "seed": 0
     # }
 
-    # if len(text) < 200:
-    #     print(f"requesting text:\n{text}")
-    # else:
-    #     print("requesting text...")
+    if len(text) < 400:
+        print(f"requesting text:\n{text}")
+    else:
+        print("requesting text...")
 
     # text = ""
 
