@@ -1,4 +1,1 @@
-User: hi
-TextSynth: hello! how are you today?
-User: i am good thank you. how are you.
-TextSynth: great, thanks!
+The following is a conversation with an AI assistant. The assistant is helpful, smart, and very friendly.
