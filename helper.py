@@ -62,7 +62,7 @@ def get_gpt(text):#, temperature, top_k, top_p, session : aiohttp.ClientSession)
     params = {
       "text": text,
       "length": 80,
-      "repetition_penalty": 1.1,
+      "repetition_penalty": 1.2,
       "temperature": 0.4,
       "top_p": 1,
       "top_k": 40,
