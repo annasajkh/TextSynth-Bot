@@ -11,9 +11,6 @@ def build_text(status):
 
     name = status.user.screen_name.replace(":", "")
 
-    if name == "TextSynth":
-        name = "AI"
-
     return f"{name}: {text}"
 
 
@@ -62,7 +59,7 @@ def get_gpt(text):#, temperature, top_k, top_p, session : aiohttp.ClientSession)
     params = {
       "text": text,
       "length": 80,
-      "repetition_penalty": 1.2,
+      "repetition_penalty": 1.15,
       "temperature": 0.4,
       "top_p": 1,
       "top_k": 40,
@@ -170,7 +167,7 @@ def reply(twitter, status, session, loop):
     memory.reverse()
     memory = memory[:1000]
 
-    text = finetune + "\n" + "\n".join(memory) + "\nAI:"
+    text = finetune + "\n" + "\n".join(memory) + "\nTextSynth:"
     #text = text.replace("User", reply_status.user.screen_name)
 
     print("make API requests")
