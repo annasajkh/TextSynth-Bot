@@ -5,7 +5,18 @@ from alt_profanity_check import predict_prob
 
 def build_text(status):
     text = get_text(status)
-    text = " ".join(filter(lambda x: "@" not in x, text.split(" ")))
+    text_temp = ""
+
+    include = False
+    
+    for chunk in text.split(" "):
+        if "@" in chunk:
+            include = True
+        if include:
+           text_temp += chunk + " "
+
+    text = text_temp.strip()
+
     text = re.sub("https://[^\s]+", "", text)
     text = re.sub("\n", " ", text).strip()
 
