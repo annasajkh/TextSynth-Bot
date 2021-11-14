@@ -10,7 +10,7 @@ def build_text(status):
     include = False
     
     for chunk in text.split(" "):
-        if "@" in chunk:
+        if "@" not in chunk:
             include = True
         if include:
            text_temp += chunk + " "
