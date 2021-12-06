@@ -32,13 +32,12 @@ def get_text(status):
         return status.text
 
 
-#async 
-def get_gpt(text):#, temperature, top_k, top_p, session : aiohttp.ClientSession):
+async def get_gpt(text, session):
     # payload = {
     #     "prompt": text,
-    #     "temperature": temperature,
-    #     "top_k": top_k, 
-    #     "top_p": top_p, 
+    #     "temperature": 0.7,
+    #     "top_k": 40, 
+    #     "top_p": 1.0, 
     #     "seed": 0
     # }
 
@@ -94,25 +93,25 @@ def get_gpt(text):#, temperature, top_k, top_p, session : aiohttp.ClientSession)
       
       time.sleep(5)
 
-    return result
+    return text
 
 def get_response(text, memory, session, loop):
-    #result = loop.run_until_complete(get_gpt(text, 0.9, 40, 0.9, session))
+    #result = loop.run_until_complete(get_gpt(text, session))
     result = get_gpt(text)
     # result = re.split(".*:",result)[0].strip()[:280]
     # result = re.sub("\n", " ", result)
 
-    # for i in range(0, 20):
-    #     print("checkking if there is something bad...")      
+    for i in range(0, 20):
+        print("checkking if there is something bad...")      
 
-    #     if not is_bad(result) and result.strip() != "" and len(result) < 280 and result.strip() not in [chunk.split(":")[1].strip() for chunk in memory]:
-    #         break
+        if not is_bad(result) and result.strip() != "" and len(result) < 280 and result.strip() not in [chunk.split(":")[1].strip() for chunk in memory]:
+            break
         
-    #     result = loop.run_until_complete(get_gpt(text, 0.9, 40, 0.9, session))
-    #     result = re.split(".*:",result)[0].strip()[:280]
-    #     result = re.sub("\n", " s", result)
+        result = loop.run_until_complete(get_gpt(text, session))
+        result = re.split(".*:",result)[0].strip()[:280]
+        result = re.sub("\n", " s", result)
 
-    #     time.sleep(2)
+        time.sleep(2)
       
     return result
 
