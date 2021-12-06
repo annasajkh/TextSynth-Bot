@@ -93,7 +93,7 @@ def get_gpt(text):#, session):
       
       time.sleep(5)
 
-    return text
+    return result
 
 def get_response(text, memory, session, loop):
     #result = loop.run_until_complete(get_gpt(text, session))
