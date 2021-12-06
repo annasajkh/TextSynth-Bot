@@ -31,8 +31,8 @@ def get_text(status):
     except:
         return status.text
 
-
-async def get_gpt(text, session):
+#async
+def get_gpt(text):#, session):
     # payload = {
     #     "prompt": text,
     #     "temperature": 0.7,
@@ -97,7 +97,7 @@ async def get_gpt(text, session):
 
 def get_response(text, memory, session, loop):
     #result = loop.run_until_complete(get_gpt(text, session))
-    result = get_gpt(text, session)
+    result = get_gpt(text)#, session)
     # result = re.split(".*:",result)[0].strip()[:280]
     # result = re.sub("\n", " ", result)
 
