@@ -31,74 +31,75 @@ def get_text(status):
     except:
         return status.text
 
-async def get_gpt(text, session):
-    payload = {
-        "prompt": text,
-        "temperature": 0.7,
-        "top_k": 40, 
-        "top_p": 1.0, 
-        "seed": 0
-    }
+#async 
+def get_gpt(text):#, session):
+    # payload = {
+    #     "prompt": text,
+    #     "temperature": 0.7,
+    #     "top_k": 40, 
+    #     "top_p": 1.0, 
+    #     "seed": 0
+    # }
 
     if len(text) < 400:
         print(f"requesting text:\n{text}")
     else:
         print("requesting text...")
 
-    text = ""
+    # text = ""
 
-    try:
-        async with session.post(url, data=json.dumps(payload, ensure_ascii=False).encode("utf-8")) as response:
-            try:
-                text = await response.text()
-            except:
-                try:
-                    text = await response.content.read()
-                    text = str(text,response.get_encoding(),errors="replace")
-                except:
-                    text = await response.content.read()
-                    text = str(text,"utf-8",errors="replace")
+    # try:
+    #     async with session.post(url, data=json.dumps(payload, ensure_ascii=False).encode("utf-8")) as response:
+    #         try:
+    #             text = await response.text()
+    #         except:
+    #             try:
+    #                 text = await response.content.read()
+    #                 text = str(text,response.get_encoding(),errors="replace")
+    #             except:
+    #                 text = await response.content.read()
+    #                 text = str(text,"utf-8",errors="replace")
                     
-            text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
-            text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
-    except Exception as e:
-        print_exc()
-        pass
+    #         text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
+    #         text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
+    # except Exception as e:
+    #     print_exc()
+    #     pass
 
-    # params = {
-    #   "text": text,
-    #   "length": 80,
-    #   "repetition_penalty": 1.12,
-    #   "temperature": 0.5,
-    #   "top_p": 1,
-    #   "top_k": 40,
-    #   "stop_sequences": '["\\n"]',
-    #   "authorization": os.environ["bearer"]
-    # }
+    params = {
+      "text": text,
+      "length": 80,
+      "repetition_penalty": 1.12,
+      "temperature": 0.5,
+      "top_p": 1,
+      "top_k": 40,
+      "stop_sequences": '["\\n"]',
+      "authorization": os.environ["bearer"]
+    }
 
 
-    # result = requests.get("https://demo-playground.forefront.link", params=params)
-    # result = result.text.split("event: update")[-1].split("retry: 30000")[0].replace("data: ", "").split(":")[-1].strip()
+    result = requests.get("https://demo-playground.forefront.link", params=params)
+    result = result.text.split("event: update")[-1].split("retry: 30000")[0].replace("data: ", "").split(":")[-1].strip()
 
-    # for i in range(5):
-    #   if not is_bad(result):
-    #     break
+    for i in range(5):
+      if not is_bad(result):
+        break
       
-    #   result = requests.get("https://demo-playground.forefront.link", params=params)
-    #   result = result.text.split("event: update")[-1].split("retry: 30000")[0].replace("data: ", "").split(":")[-1].strip()
+      result = requests.get("https://demo-playground.forefront.link", params=params)
+      result = result.text.split("event: update")[-1].split("retry: 30000")[0].replace("data: ", "").split(":")[-1].strip()
 
-    #   if i == 4:
-    #     return "i'm sorry i don't know"
+      if i == 4:
+        return "i'm sorry i don't know"
       
-    #   time.sleep(5)
+      time.sleep(5)
 
-    return text
+    return result
 
 def get_response(text, memory, session, loop):
-    result = loop.run_until_complete(get_gpt(text, session))
-    # result = get_gpt(text)#, session)
-    result = re.split(".*:",result)[0].strip()[:280]
-    result = re.sub("\n", " ", result)
+    #result = loop.run_until_complete(get_gpt(text, session))
+    result = get_gpt(text)
+    #result = re.split(".*:",result)[0].strip()[:280]
+    #result = re.sub("\n", " ", result)
 
     for i in range(0, 20):
         print("checkking if there is something bad...")      
