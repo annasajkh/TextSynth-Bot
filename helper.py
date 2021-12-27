@@ -52,7 +52,7 @@ def get_gpt(text):
     params = {
       "text": text,
       "length": 80,
-      "repetition_penalty": 1.12,
+      "repetition_penalty": 1.0,
       "temperature": 0.5,
       "top_p": 1,
       "top_k": 40,
