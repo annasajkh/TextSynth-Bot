@@ -95,7 +95,7 @@ def get_response(text, memory):
     
     print(f"RESULT: {result}")
 
-    for i in range(0, 20):
+    for i in range(0, 50):
         print("checkking if there is something bad...")
 
         if not is_bad(result) and result.strip().lower() not in [chunk.split(":")[1].strip().lower() for chunk in memory]:
@@ -105,9 +105,16 @@ def get_response(text, memory):
             result = get_gpt(text)
         except Exception as e:
             print_exc()
-            result = loop.run_until_complete(get_gpt2(text, session))
+            result = get_gpt2(text)
             result = re.split(".*:",result)[0].strip()[:280]
             result = re.sub("\n", " ", result)
+        
+        while result.strip() == "":
+            result = get_gpt2(text)
+            result = re.split(".*:",result)[0].strip()[:280]
+            result = re.sub("\n", " ", result)
+
+        print(f"RESULT: {result}")
 
         time.sleep(2)
       
