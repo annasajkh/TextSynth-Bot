@@ -87,15 +87,18 @@ def get_response(text, memory):
         result = re.split(".*:",result)[0].strip()[:280]
         result = re.sub("\n", " ", result)
     
+    
     while result.strip() == "":
         result = get_gpt2(text)
         result = re.split(".*:",result)[0].strip()[:280]
         result = re.sub("\n", " ", result)
     
+    print(f"RESULT: {result}")
+
     for i in range(0, 20):
         print("checkking if there is something bad...")
 
-        if not is_bad(result) and result.strip() != "" and len(result) < 280 and result.strip() not in [chunk.split(":")[1].strip() for chunk in memory]:
+        if not is_bad(result) and result.strip().lower() not in [chunk.split(":")[1].strip().lower() for chunk in memory]:
             break
         
         try:
