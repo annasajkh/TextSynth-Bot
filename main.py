@@ -1,4 +1,3 @@
-import asyncio
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -19,11 +18,6 @@ app = Flask(__name__)
 def reply_thread(thread_name):
     print(thread_name + " starting")
 
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-
-    session = loop.run_until_complete(get_session())
-
     class Listener(tweepy.StreamListener):
         def on_status(self, status):
 
@@ -36,7 +30,7 @@ def reply_thread(thread_name):
             print("trying to reply to " + status.user.screen_name)
 
             try:
-                reply(twitter, status, session, loop)
+                reply(twitter, status)
             except:
                 traceback.print_exc()
 

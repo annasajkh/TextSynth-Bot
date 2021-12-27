@@ -7,7 +7,6 @@ import re
 import json
 import time
 import random
-import aiohttp
 import os
 
 os.system("pip3 install scikit-learn==0.24.0")

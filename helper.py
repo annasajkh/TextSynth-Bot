@@ -31,41 +31,24 @@ def get_text(status):
     except:
         return status.text
 
-#async 
-def get_gpt(text):#, session):
-    # payload = {
-    #     "prompt": text,
-    #     "temperature": 0.7,
-    #     "top_k": 40, 
-    #     "top_p": 1.0, 
-    #     "seed": 0
-    # }
+def get_gpt2(text):
+  
+    payload = {
+        "prompt": text,
+        "temperature": 0.5,
+        "top_k": 40, 
+        "top_p": 1.0, 
+        "seed": 0
+    }
 
-    if len(text) < 400:
-        print(f"requesting text:\n{text}")
-    else:
-        print("requesting text...")
+    resp = requests.post("https://bellard.org/textsynth/api/v1/engines/gptj_6B/completions",data=json.dumps(payload, ensure_ascii=False).encode("utf-8"))
 
-    # text = ""
+    print(resp.text)
 
-    # try:
-    #     async with session.post(url, data=json.dumps(payload, ensure_ascii=False).encode("utf-8")) as response:
-    #         try:
-    #             text = await response.text()
-    #         except:
-    #             try:
-    #                 text = await response.content.read()
-    #                 text = str(text,response.get_encoding(),errors="replace")
-    #             except:
-    #                 text = await response.content.read()
-    #                 text = str(text,"utf-8",errors="replace")
-                    
-    #         text = filter(lambda x: x != "",[chunk for chunk in text.split("\n")])
-    #         text = "".join([json.loads(chunk)["text"] for chunk in text]).strip()
-    # except Exception as e:
-    #     print_exc()
-    #     pass
+    return json.loads(resp.text)["text"]
 
+
+def get_gpt(text):
     params = {
       "text": text,
       "length": 80,
@@ -95,21 +78,33 @@ def get_gpt(text):#, session):
 
     return result
 
-def get_response(text, memory, session, loop):
-    #result = loop.run_until_complete(get_gpt(text, session))
-    result = get_gpt(text)
-    #result = re.split(".*:",result)[0].strip()[:280]
-    #result = re.sub("\n", " ", result)
-
+def get_response(text, memory):
+    try:
+        result = get_gpt(text)
+    except Exception as e:
+        print_exc()
+        result = get_gpt2(text)
+        result = re.split(".*:",result)[0].strip()[:280]
+        result = re.sub("\n", " ", result)
+    
+    while result.strip() == "":
+        result = get_gpt2(text)
+        result = re.split(".*:",result)[0].strip()[:280]
+        result = re.sub("\n", " ", result)
+    
     for i in range(0, 20):
-        print("checkking if there is something bad...")      
+        print("checkking if there is something bad...")
 
         if not is_bad(result) and result.strip() != "" and len(result) < 280 and result.strip() not in [chunk.split(":")[1].strip() for chunk in memory]:
             break
         
-        result = loop.run_until_complete(get_gpt(text, session))
-        result = re.split(".*:",result)[0].strip()[:280]
-        result = re.sub("\n", " s", result)
+        try:
+            result = get_gpt(text)
+        except Exception as e:
+            print_exc()
+            result = loop.run_until_complete(get_gpt2(text, session))
+            result = re.split(".*:",result)[0].strip()[:280]
+            result = re.sub("\n", " ", result)
 
         time.sleep(2)
       
@@ -129,7 +124,7 @@ def is_bad(text):
 
 
 
-def reply(twitter, status, session, loop):
+def reply(twitter, status):
     time.sleep(2 + random.random() * 3)
     try:
         twitter.create_favorite(status.id)
@@ -182,7 +177,7 @@ def reply(twitter, status, session, loop):
 
     print("make API requests")
 
-    result = get_response(text, memory, session, loop)
+    result = get_response(text, memory)
     result = result[0:280]
 
     print("posting result...")
@@ -192,7 +187,8 @@ def reply(twitter, status, session, loop):
             updated_status = twitter.update_status(f"@{reply_status.user.screen_name} {result}", in_reply_to_status_id=reply_status.id)
             statuses_cache.append(updated_status)
             break
-        except:
+        except Exception as e:
+            print(e)
             time.sleep(5)
 
 
