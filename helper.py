@@ -35,7 +35,7 @@ def get_gpt2(text):
   
     payload = {
         "prompt": text,
-        "temperature": 0.5,
+        "temperature": 0.7,
         "top_k": 40, 
         "top_p": 1.0, 
         "seed": 0
@@ -78,7 +78,7 @@ def get_gpt(text):
 
     return result
 
-def get_response(text, memory):
+def get_response(text, reply_text, memory):
     try:
         result = get_gpt(text)
     except Exception as e:
@@ -98,7 +98,7 @@ def get_response(text, memory):
     for i in range(0, 50):
         print("checkking if there is something bad...")
 
-        if not is_bad(result) and result.strip().lower() not in [chunk.split(":")[1].strip().lower() for chunk in memory]:
+        if not is_bad(result) and result.strip().lower() not in [chunk.split(":")[1].strip().lower() for chunk in memory] and result.strip().lower != reply_text.strip().lower():
             break
         
         try:
@@ -187,7 +187,7 @@ def reply(twitter, status):
 
     print("make API requests")
 
-    result = get_response(text, memory)
+    result = get_response(text, get_text(reply_status) ,memory)
     result = result[0:280]
 
     print("posting result...")
