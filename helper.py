@@ -37,11 +37,17 @@ def get_gpt2(text):
         "prompt": text,
         "temperature": 0.7,
         "top_k": 40, 
-        "top_p": 1.0, 
-        "seed": 0
+        "top_p": 0.9,
+        "seed": 0,
+        "max_tokens": 80,
+        "stop": "\n"
     }
 
-    resp = requests.post("https://bellard.org/textsynth/api/v1/engines/gptj_6B/completions",data=json.dumps(payload, ensure_ascii=False).encode("utf-8"))
+    headers= {
+        "Authorization": os.environ["TEXTSYNTH_KEY"]
+    }
+
+    resp = requests.post("https://api.textsynth.com/v1/engines/gptj_6B/completions",data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), headers=headers)
 
     print(resp.text)
 
@@ -57,7 +63,7 @@ def get_gpt(text):
       "top_p": 1,
       "top_k": 40,
       "stop_sequences": '["\\n"]',
-      "authorization": os.environ["bearer"]
+      "authorization": os.environ["HELLOFOREFRONT_KEY"]
     }
 
 
@@ -92,6 +98,7 @@ def get_response(text, reply_text, memory):
         result = get_gpt2(text)
         result = re.split(".*:",result)[0].strip()[:280]
         result = re.sub("\n", " ", result)
+        time.sleep(2)
     
     print(f"RESULT: {result}")
 
@@ -113,6 +120,7 @@ def get_response(text, reply_text, memory):
             result = get_gpt2(text)
             result = re.split(".*:",result)[0].strip()[:280]
             result = re.sub("\n", " ", result)
+            time.sleep(2)
 
         print(f"RESULT: {result}")
 
@@ -126,7 +134,7 @@ def is_bad(text):
         print("bad word")
         return True
     
-    if True in [bad in text for bad in [" die ", " kill ", " burn body ", " burn you "]]:
+    if True in [bad in text for bad in ["die", "kill", "burn body", "burn you"]]:
         print("kill word")
         return True
     
@@ -135,7 +143,7 @@ def is_bad(text):
 
 
 def reply(twitter, status):
-    time.sleep(2 + random.random() * 3)
+    time.sleep(1 + random.random() * 2)
     try:
         twitter.create_favorite(status.id)
     except:
