@@ -35,7 +35,7 @@ def get_gpt2(text):
   
     payload = {
         "prompt": text,
-        "temperature": 0.7,
+        "temperature": 0.5,
         "top_k": 40, 
         "top_p": 1.0,
         "seed": 0,
