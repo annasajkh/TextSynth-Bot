@@ -35,7 +35,7 @@ def get_gpt2(text):
   
     payload = {
         "prompt": text,
-        "temperature": 0.5,
+        "temperature": 0.6,
         "top_k": 40, 
         "top_p": 1.0,
         "seed": 0,
@@ -102,7 +102,7 @@ def get_response(text, reply_text, memory):
     
     print(f"RESULT: {result}")
 
-    for i in range(0, 50):
+    for i in range(0, 20):
         print("checkking if there is something bad...")
 
         if not is_bad(result) and result.strip().lower() not in [chunk.split(":")[1].strip().lower() for chunk in memory] and result.strip().lower != reply_text.strip().lower():
