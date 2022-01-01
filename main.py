@@ -93,8 +93,6 @@ def ping_thread(thread_name):
     
     while True:
         requests.get("https://TextSynth-Bot.annasvirtual.repl.co")
-        requests.get("https://huggingface.co/spaces/Annas/minDALL-E")
-        time.sleep(3)
 
 @app.route('/')
 def main():
