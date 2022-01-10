@@ -32,14 +32,17 @@ def get_text(status):
         return status.text
 
 def get_gpt2(text):
-  
+
+    if len(text) < 1000:
+        print(text)
+
     payload = {
         "prompt": text,
-        "temperature": 0.7,
+        "temperature": 0.8,
         "top_k": 40, 
         "top_p": 1.0,
         "seed": 0,
-        "max_tokens": 80,
+        "max_tokens": 100,
         "stop": "\n"
     }
 
@@ -85,20 +88,21 @@ def get_gpt(text):
     return result
 
 def get_response(text, reply_text, memory):
-    try:
-        result = get_gpt(text)
-    except Exception as e:
-        print_exc()
-        result = get_gpt2(text)
-        result = re.split(".*:",result)[0].strip()[:280]
-        result = re.sub("\n", " ", result)
+    # try:
+    #     result = get_gpt(text)
+    # except Exception as e:
+    #     print_exc()
+    
+    result = get_gpt2(text)
+    result = re.split(".*:",result)[0].strip()[:280]
+    result = re.sub("\n", " ", result)
     
     
-    while result.strip() == "":
-        result = get_gpt2(text)
-        result = re.split(".*:",result)[0].strip()[:280]
-        result = re.sub("\n", " ", result)
-        time.sleep(2)
+    # while result.strip() == "":
+    #     result = get_gpt2(text)
+    #     result = re.split(".*:",result)[0].strip()[:280]
+    #     result = re.sub("\n", " ", result)
+    #     time.sleep(2)
     
     print(f"RESULT: {result}")
 
@@ -108,19 +112,20 @@ def get_response(text, reply_text, memory):
         if not is_bad(result) and result.strip().lower() not in [chunk.split(":")[1].strip().lower() for chunk in memory] and result.strip().lower != reply_text.strip().lower():
             break
         
-        try:
-            result = get_gpt(text)
-        except Exception as e:
-            print_exc()
-            result = get_gpt2(text)
-            result = re.split(".*:",result)[0].strip()[:280]
-            result = re.sub("\n", " ", result)
+        # try:
+        #     result = get_gpt(text)
+        # except Exception as e:
+        #     print_exc()
         
-        while result.strip() == "":
-            result = get_gpt2(text)
-            result = re.split(".*:",result)[0].strip()[:280]
-            result = re.sub("\n", " ", result)
-            time.sleep(2)
+        result = get_gpt2(text)
+        result = re.split(".*:",result)[0].strip()[:280]
+        result = re.sub("\n", " ", result)
+        
+        # while result.strip() == "":
+        #     result = get_gpt2(text)
+        #     result = re.split(".*:",result)[0].strip()[:280]
+        #     result = re.sub("\n", " ", result)
+        #     time.sleep(2)
 
         print(f"RESULT: {result}")
 
@@ -188,7 +193,7 @@ def reply(twitter, status):
             break
 
     memory.reverse()
-    memory = memory[:1000]
+    memory = memory[:30]
 
     text = finetune + "\n" + "\n".join(memory) + "\nTextSynth:"
     #text = text.replace("User", reply_status.user.screen_name)
@@ -220,7 +225,7 @@ def get_tweet():
         "maxTokens": 100,
         "stopSequences": ["#"],
         "topKReturn": 0,
-        "temperature": 1.0
+        "temperature": 0.7
     }
 
     response = requests.post(
