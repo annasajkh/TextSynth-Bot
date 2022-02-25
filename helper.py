@@ -42,7 +42,7 @@ def get_gpt2(text):
         "top_k": 40, 
         "top_p": 1.0,
         "seed": 0,
-        "max_tokens": 100,
+        "max_tokens": 200,
         "stop": "\n"
     }
 
@@ -109,7 +109,7 @@ def get_response(text, reply_text, memory):
     for i in range(0, 20):
         print("checkking if there is something bad...")
 
-        if not is_bad(result) and result.strip().lower() not in [chunk.split(":")[1].strip().lower() for chunk in memory] and result.strip().lower != reply_text.strip().lower():
+        if not is_bad(result) and result.strip().lower() not in [chunk.split(":")[1].strip().lower() for chunk in memory] and result.strip().lower != reply_text.strip().lower() and len(result.strip()) <= 280 and len(result.strip()) > 0:
             break
         
         # try:
@@ -118,7 +118,7 @@ def get_response(text, reply_text, memory):
         #     print_exc()
         
         result = get_gpt2(text)
-        result = re.split(".*:",result)[0].strip()[:280]
+        result = re.split(".*:",result)[0].strip()
         result = re.sub("\n", " ", result)
         
         # while result.strip() == "":
@@ -207,8 +207,26 @@ def reply(twitter, status):
     
     for i in range(20):
         try:
-            updated_status = twitter.update_status(f"@{reply_status.user.screen_name} {result}", in_reply_to_status_id=reply_status.id)
-            statuses_cache.append(updated_status)
+          temp = [""]
+    
+          for chunk in result.split(" "):
+            if len(temp[-1] + " " + chunk) > 280:
+              temp[-1] = temp[-1].strip()
+              temp.append("")
+            
+            temp[-1] += " " + chunk
+          
+          if temp[0].strip() != "":
+            tweet = twitter.update_status(f"@{reply_status.user.screen_name} {temp[0]}", in_reply_to_status_id=reply_status.id)
+            statuses_cache.append(tweet)
+    
+            for i in range(1, len(temp)):
+              time.sleep(random.random() * 3 + 1)
+    
+              tweet = twitter.update_status(status=temp[i], 
+                                            in_reply_to_status_id=tweet.id,
+                                            auto_populate_reply_metadata=True)
+              statuses_cache.append(tweet)
             break
         except Exception as e:
             print(e)
@@ -225,7 +243,7 @@ def get_tweet():
         "maxTokens": 100,
         "stopSequences": ["#"],
         "topKReturn": 0,
-        "temperature": 0.7
+        "temperature": 0.8
     }
 
     response = requests.post(

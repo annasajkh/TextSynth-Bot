@@ -83,10 +83,10 @@ def tweet_thread(thread_name):
                 
                 result = get_tweet()
 
-            time.sleep(60 * 60)
+            time.sleep(60 * 60 * 4)
         except Exception as e:
             print(e)
-            time.sleep(60 * 60)
+            time.sleep(60 * 60 * 4)
 
 def ping_thread(thread_name):
     print(thread_name + " starting")
